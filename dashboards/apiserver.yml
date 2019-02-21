@@ -1,0 +1,531 @@
+---
+dashboard:
+  title: OCP Metrics WIP
+  timezone: browser
+  templating:
+    - name: interval
+      type: custom
+      current:
+        text: 1m
+        value:
+          - 1m
+      options:
+        - 30s
+        - 1m
+        - 2m
+        - 3m
+        - 4m
+        - 5m
+    - name: instance
+      type: query
+      refresh: 2
+      query: "label_values(apiserver_request_count, instance)"
+    - name: node
+      type: query
+      refresh: 2
+      multi: true
+      includeAll: true
+      query: "label_values(kubernetes_io_hostname)"
+    - name: process_name
+      type: query
+      refresh: 2
+      # multi: true
+      # includeAll: false
+      query: "label_values(container_fs_reads_total, id)"
+  time:
+    # from: now-1h
+    # to: now
+    from: "2019-02-12T21:00:00.000"
+    to: "2019-02-14T07:00:00.000"
+  rows:
+    - title: description row
+      height: 50px
+      panels:
+        - title: ocp-prometheus-dashboards
+          content: "**This dashboard is provided by ocp-prometheus-dashboards and managed via Grafyaml**"
+          type: text
+
+    - title: Pods vs QPS
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Pod Count
+          type: graph
+          fill: 0
+          nullPointMode: 'null'
+          targets:
+            - expr: "sum(kubelet_running_pod_count)"
+        - title: QPS by Master
+          type: graph
+          fill: 0
+          nullPointMode: 'null'
+          targets:
+            - expr: "sum by (instance) (rate(apiserver_request_count{}[$interval]))"
+              legendFormat: "{{instance}}"
+
+    - title: etcd CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval]))'
+              legendFormat: "{{instance}}"
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_memory_rss{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval]))'
+              legendFormat: "RSS {{instance}}"
+        - title: IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_fs_reads_total{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval]))'
+              legendFormat: "Reads {{instance}}"
+            - expr: 'sum by (instance) (rate(container_fs_writes_total{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval]))'
+              legendFormat: "Writes {{instance}}"
+        - title: Network
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval])) / 125000'
+              legendFormat: "RX {{instance}}"
+            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{instance=~"$node",id=~"/system.slice/etcd.service"}[$interval])) / 125000'
+              legendFormat: "TX {{instance}}"
+
+    - title: docker CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{instance=~"$node",id=~"/system.slice/docker.service"}[$interval]))'
+              legendFormat: "{{instance}}"
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_memory_rss{instance=~"$node",id=~"/system.slice/docker.service"}[$interval]))'
+              legendFormat: "RSS {{instance}}"
+        - title: IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_fs_reads_total{instance=~"$node",id=~"/system.slice/docker.service"}[$interval]))'
+              legendFormat: "Reads {{instance}}"
+            - expr: 'sum by (instance) (rate(container_fs_writes_total{instance=~"$node",id=~"/system.slice/docker.service"}[$interval]))'
+              legendFormat: "Writes {{instance}}"
+        - title: Network
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{instance=~"$node",id=~"/system.slice/docker.service"}[$interval])) / 125000'
+              legendFormat: "RX {{instance}}"
+            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{instance=~"$node",id=~"/system.slice/docker.service"}[$interval])) / 125000'
+              legendFormat: "TX {{instance}}"
+
+    - title: atomic-openshift-master-api CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "{{instance}}"
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_memory_rss{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "RSS {{instance}}"
+        - title: IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_fs_reads_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "Reads {{instance}}"
+            - expr: 'sum by (instance) (rate(container_fs_writes_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "Writes {{instance}}"
+        - title: Network
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{instance=~"$node",id=~"$process_name"}[$interval])) / 125000'
+              legendFormat: "RX {{instance}}"
+            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{instance=~"$node",id=~"$process_name"}[$interval])) / 125000'
+              legendFormat: "TX {{instance}}"
+
+    - title: $process_name CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "{{instance}}"
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_memory_rss{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "RSS {{instance}}"
+        - title: IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_fs_reads_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "Reads {{instance}}"
+            - expr: 'sum by (instance) (rate(container_fs_writes_total{instance=~"$node",id=~"$process_name"}[$interval]))'
+              legendFormat: "Writes {{instance}}"
+        - title: Network
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{instance=~"$node",id=~"$process_name"}[$interval])) / 125000'
+              legendFormat: "RX {{instance}}"
+            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{instance=~"$node",id=~"$process_name"}[$interval])) / 125000'
+              legendFormat: "TX {{instance}}"
+            - expr: 'sum by (instance, id) (rate(container_network_transmit_bytes_total{instance=~"$node"}[$interval])) / 125000'
+
+    #
+    # - title: API Request Count by Resources (events)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: events Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="events",verb="GET"", instance="$instance"}[$interval])
+    #     - title: events Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="events",verb="POST", instance="$instance"}[$interval])
+    #     - title: events Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="events",verb="PUT", instance="$instance"}[$interval])
+    #     - title: events Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="events",verb="DELETE", instance="$instance"}[$interval])
+    #
+    # - title: API Request Count by Resources (routes)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: routes Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="routes",verb="GET", instance="$instance"}[$interval])
+    #     - title: routes Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="routes",verb="POST", instance="$instance"}[$interval])
+    #     - title: routes Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="routes",verb="PUT", instance="$instance"}[$interval])
+    #     - title: routes Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="routes",verb="DELETE", instance="$instance"}[$interval])
+    #
+    # - title: API Request Count by Resources (nodes)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: nodes Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="nodes",verb="GET", instance="$instance"}[$interval])
+    #     - title: nodes Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="nodes",verb="POST", instance="$instance"}[$interval])
+    #     - title: nodes Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="nodes",verb="PUT", instance="$instance"}[$interval])
+    #     - title: nodes Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="nodes",verb="DELETE", instance="$instance"}[$interval])
+    #
+    # - title: API Request Count by Resources (projects)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: projects Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="projects",verb="GET", instance="$instance"}[$interval])
+    #     - title: projects Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="projects",verb="POST", instance="$instance"}[$interval])
+    #     - title: projects Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="projects",verb="PUT", instance="$instance"}[$interval])
+    #     - title: projects Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="projects",verb="DELETE", instance="$instance"}[$interval])
+    #
+    # - title: API Request Count by Resources (pods)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: pods Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="pods",verb="GET", instance="$instance"}[$interval])
+    #     - title: pods Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="pods",verb="POST", instance="$instance"}[$interval])
+    #     - title: pods Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="pods",verb="PUT", instance="$instance"}[$interval])
+    #     - title: pods Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="pods",verb="DELETE", instance="$instance"}[$interval])
+    #
+    # - title: API Request Count by Resources (Secrets)
+    #   collapse: true
+    #   height: 200px
+    #   showTitle: true
+    #   panels:
+    #     - title: Secrets Get
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="secrets",verb="GET", instance="$instance"}[$interval])
+    #     - title: Secrets Post
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="secrets",verb="POST", instance="$instance"}[$interval])
+    #     - title: Secrets Put
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="secrets",verb="PUT", instance="$instance"}[$interval])
+    #     - title: Secrets Delete
+    #       type: graph
+    #       fill: 0
+    #       nullPointMode: 'null'
+    #       targets:
+    #         - expr: rate(apiserver_request_count{resource="secrets",verb="DELETE", instance="$instance"}[$interval])
