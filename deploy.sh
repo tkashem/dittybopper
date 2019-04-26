@@ -25,6 +25,9 @@ scale_ci_grafana_route=`oc get routes -n scale-ci-grafana -o=json | jq -r '.item
 
 api_key=`curl -s -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"name":"grafyaml","role":"Admin"}'  http://admin:${GRAFANA_PASSWORD}@${scale_ci_grafana_route}/api/auth/keys | jq -r '.key'`
 
+# Clear GrafYaml Cache
+rm -rf ~/.cache/grafyaml/cache.dbm
+
 echo "Uploading Dashboards via ${api_key}"
-echo "grafana-dashboard --grafana-url http://${scale_ci_grafana_route} --grafana-apikey ${api_key} update dashboards/"
+echo "grafana-dashboard --grafana-url http://${scale_ci_grafana_route}/ --grafana-apikey ${api_key} update dashboards/"
 grafana-dashboard --grafana-url http://${scale_ci_grafana_route}/ --grafana-apikey ${api_key} update dashboards/
