@@ -1,6 +1,6 @@
 ---
 dashboard:
-  title: OCP Metrics WIP
+  title: OCP4 General Metrics
   timezone: browser
   templating:
     - name: interval
@@ -61,6 +61,32 @@ dashboard:
           targets:
             - expr: "sum by (instance) (rate(apiserver_request_count{}[$interval]))"
               legendFormat: "{{instance}}"
+
+    - title: etcd Metrics
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Actual database usage
+          type: graph
+          fill: 0
+          nullPointMode: 'null'
+          targets:
+            - expr: "sum by (instance) (etcd_mvcc_db_total_size_in_use_in_bytes)"
+              legendFormat: "{{instance}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: Database size including free space waiting for defrag
+          type: graph
+          fill: 0
+          nullPointMode: 'null'
+          targets:
+            - expr: "sum by (instance) (etcd_debugging_mvcc_db_total_size_in_bytes)"
+              legendFormat: "{{instance}}"
+          yaxes:
+            - format: bytes
+            - format: short
 
     - title: etcd CPU/Mem/IO/Network
       collapse: true

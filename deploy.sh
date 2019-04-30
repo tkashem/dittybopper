@@ -28,6 +28,12 @@ api_key=`curl -s -H "Content-Type: application/json" -H "Accept: application/jso
 # Clear GrafYaml Cache
 rm -rf ~/.cache/grafyaml/cache.dbm
 
-echo "Uploading Dashboards via ${api_key}"
-echo "grafana-dashboard --grafana-url http://${scale_ci_grafana_route}/ --grafana-apikey ${api_key} update dashboards/"
-grafana-dashboard --grafana-url http://${scale_ci_grafana_route}/ --grafana-apikey ${api_key} update dashboards/
+# Creates local GrafYaml config file
+echo "[cache]" > .grafyaml_config
+echo "enabled = false" >> .grafyaml_config
+echo "[grafana]" >> .grafyaml_config
+echo "url = http://${scale_ci_grafana_route}" >> .grafyaml_config
+echo "apikey = ${api_key}" >> .grafyaml_config
+
+echo "Uploading Dashboards to http://${scale_ci_grafana_route}/"
+grafana-dashboard --config-file .grafyaml_config update dashboards/
