@@ -16,22 +16,6 @@ dashboard:
         - 3m
         - 4m
         - 5m
-    # - name: apiserver_instance
-    #   type: query
-    #   refresh: 2
-    #   query: "label_values(apiserver_request_count, instance)"
-    # # - name: container_instance
-    # #   type: query
-    # #   refresh: 2
-    # #   multi: true
-    # #   includeAll: true
-    # #   query: "label_values(container_cpu_usage_seconds_total, instance)"
-    # - name: process_name
-    #   type: query
-    #   refresh: 2
-    #   # multi: true
-    #   # includeAll: false
-    #   query: "label_values(container_fs_reads_total, id)"
   time:
     from: now-1h
     to: now
@@ -106,9 +90,11 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            # - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{container_name=~"etcd",instance=~"$container_instance"}[$interval]))'
-            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{container_name=~"etcd"}[$interval]))'
-              legendFormat: "{{instance}}"
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="etcd-member"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
         - title: Memory
           type: graph
           fill: 0
@@ -123,9 +109,12 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (container_memory_rss{container_name=~"etcd"})'
-              legendFormat: "RSS {{instance}}"
-        - title: IO Read
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="etcd-member"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
           type: graph
           fill: 0
           legend:
@@ -138,9 +127,14 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_reads_total{container_name=~"etcd"}[$interval]))'
-              legendFormat: "Reads {{instance}}"
-        - title: IO Write
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="etcd-member"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="etcd-member"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
           type: graph
           fill: 0
           legend:
@@ -153,40 +147,15 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_writes_total{container_name=~"etcd"}[$interval]))'
-              legendFormat: "Writes {{instance}}"
-        - title: Network Receive
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{pod_name=~"master-etcd-.*"}[$interval])) / 125000'
-              legendFormat: "RX {{instance}}"
-        - title: Network Transmit
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{pod_name=~"master-etcd-.*"}[$interval])) / 125000'
-              legendFormat: "TX {{instance}}"
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="etcd-member"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="etcd-member"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
 
-    - title: docker CPU/Mem/IO
+    - title: OpenShift apiserver CPU/Mem/IO/Network
       collapse: true
       height: 200px
       showTitle: true
@@ -204,8 +173,11 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{id=~"/system.slice/docker.service"}[$interval]))'
-              legendFormat: "{{instance}}"
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="openshift-apiserver"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
         - title: Memory
           type: graph
           fill: 0
@@ -220,9 +192,12 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (container_memory_rss{id=~"/system.slice/docker.service"}[$interval])'
-              legendFormat: "RSS {{instance}}"
-        - title: IO Read
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="openshift-apiserver"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
           type: graph
           fill: 0
           legend:
@@ -235,9 +210,14 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_reads_total{id=~"/system.slice/docker.service"}[$interval]))'
-              legendFormat: "Reads {{instance}}"
-        - title: IO Write
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="openshift-apiserver"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="openshift-apiserver"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
           type: graph
           fill: 0
           legend:
@@ -250,40 +230,15 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_writes_total{id=~"/system.slice/docker.service"}[$interval]))'
-              legendFormat: "Writes {{instance}}"
-        # - title: Network Receive
-        #   type: graph
-        #   fill: 0
-        #   legend:
-        #     alignAsTable: true
-        #     avg: true
-        #     max: true
-        #     min: true
-        #     show: true
-        #     values: true
-        #   nullPointMode: 'null'
-        #   span: 6
-        #   targets:
-        #     - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{pod_name=~"master-etcd-.*"}[$interval])) / 125000'
-        #       legendFormat: "RX {{instance}}"
-        # - title: Network Transmit
-        #   type: graph
-        #   fill: 0
-        #   legend:
-        #     alignAsTable: true
-        #     avg: true
-        #     max: true
-        #     min: true
-        #     show: true
-        #     values: true
-        #   nullPointMode: 'null'
-        #   span: 6
-        #   targets:
-        #     - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{pod_name=~"master-etcd-.*"}[$interval])) / 125000'
-        #       legendFormat: "TX {{instance}}"
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="openshift-apiserver"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="openshift-apiserver"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
 
-    - title: master-controllers CPU/Mem/IO/Network
+    - title: kube-apiserver CPU/Mem/IO/Network
       collapse: true
       height: 200px
       showTitle: true
@@ -301,8 +256,11 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_cpu_usage_seconds_total{container_name=~"master-controllers.*"}[$interval]))'
-              legendFormat: "{{instance}}"
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name=~"kube-apiserver-[0-9]*"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
         - title: Memory
           type: graph
           fill: 0
@@ -317,9 +275,12 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (container_memory_rss{container_name=~"master-controllers.*"})'
-              legendFormat: "RSS {{instance}}"
-        - title: IO Read
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name=~"kube-apiserver-[0-9]*"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
           type: graph
           fill: 0
           legend:
@@ -332,9 +293,14 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_reads_total{container_name=~"master-controllers.*"}[$interval]))'
-              legendFormat: "Reads {{instance}}"
-        - title: IO Write
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name=~"kube-apiserver-[0-9]*"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name=~"kube-apiserver-[0-9]*"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
           type: graph
           fill: 0
           legend:
@@ -347,217 +313,176 @@ dashboard:
           nullPointMode: 'null'
           span: 6
           targets:
-            - expr: 'sum by (instance) (rate(container_fs_writes_total{container_name=~"master-controllers.*"}[$interval]))'
-              legendFormat: "Writes {{instance}}"
-        - title: Network Receive
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: 'sum by (instance) (rate(container_network_receive_bytes_total{pod_name=~"master-controllers.*"}[$interval])) / 125000'
-              legendFormat: "RX {{instance}}"
-        - title: Network Transmit
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: 'sum by (instance) (rate(container_network_transmit_bytes_total{pod_name=~"master-controllers.*"}[$interval])) / 125000'
-              legendFormat: "TX {{instance}}"
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-apiserver-[0-9]*"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-apiserver-[0-9]*"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
 
+    - title: openshift-controller-manager CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="controller-manager", namespace="openshift-controller-manager"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="controller-manager", namespace="openshift-controller-manager"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="controller-manager", namespace="openshift-controller-manager"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="controller-manager", namespace="openshift-controller-manager"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="controller-manager", namespace="openshift-controller-manager"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="controller-manager", namespace="openshift-controller-manager"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
 
-
-    # - title: API Request Count by Resources (events)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: events Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="events",verb="GET"", instance="$apiserver_instance"}[$interval])
-    #     - title: events Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="events",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: events Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="events",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: events Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="events",verb="DELETE", instance="$apiserver_instance"}[$interval])
-    #
-    # - title: API Request Count by Resources (routes)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: routes Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="routes",verb="GET", instance="$apiserver_instance"}[$interval])
-    #     - title: routes Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="routes",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: routes Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="routes",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: routes Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="routes",verb="DELETE", instance="$apiserver_instance"}[$interval])
-    #
-    # - title: API Request Count by Resources (nodes)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: nodes Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="nodes",verb="GET", instance="$apiserver_instance"}[$interval])
-    #     - title: nodes Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="nodes",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: nodes Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="nodes",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: nodes Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="nodes",verb="DELETE", instance="$apiserver_instance"}[$interval])
-    #
-    # - title: API Request Count by Resources (projects)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: projects Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="projects",verb="GET", instance="$apiserver_instance"}[$interval])
-    #     - title: projects Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="projects",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: projects Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="projects",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: projects Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="projects",verb="DELETE", instance="$apiserver_instance"}[$interval])
-    #
-    # - title: API Request Count by Resources (pods)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: pods Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="pods",verb="GET", instance="$apiserver_instance"}[$interval])
-    #     - title: pods Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="pods",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: pods Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="pods",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: pods Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="pods",verb="DELETE", instance="$apiserver_instance"}[$interval])
-    #
-    # - title: API Request Count by Resources (Secrets)
-    #   collapse: true
-    #   height: 200px
-    #   showTitle: true
-    #   panels:
-    #     - title: Secrets Get
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="secrets",verb="GET", instance="$apiserver_instance"}[$interval])
-    #     - title: Secrets Post
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="secrets",verb="POST", instance="$apiserver_instance"}[$interval])
-    #     - title: Secrets Put
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="secrets",verb="PUT", instance="$apiserver_instance"}[$interval])
-    #     - title: Secrets Delete
-    #       type: graph
-    #       fill: 0
-    #       nullPointMode: 'null'
-    #       targets:
-    #         - expr: rate(apiserver_request_count{resource="secrets",verb="DELETE", instance="$apiserver_instance"}[$interval])
+    - title: kube-controller-manager CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name=~"kube-controller-manager-[0-9]*"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name=~"kube-controller-manager-[0-9]*"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name=~"kube-controller-manager-[0-9]*"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name=~"kube-controller-manager-[0-9]*"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-controller-manager-[0-9]*"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-controller-manager-[0-9]*"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
