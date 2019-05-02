@@ -1,6 +1,6 @@
 ---
 dashboard:
-  title: OCP4 General Metrics
+  title: OCP4 Master Metrics
   timezone: browser
   templating:
     - name: interval
@@ -50,8 +50,8 @@ dashboard:
           fill: 0
           nullPointMode: 'null'
           targets:
-            - expr: "sum by (instance) (etcd_mvcc_db_total_size_in_use_in_bytes)"
-              legendFormat: "{{instance}}"
+            - expr: "sum by (pod) (etcd_mvcc_db_total_size_in_use_in_bytes{endpoint='etcd-metrics'})"
+              legendFormat: "{{pod}}"
           yaxes:
             - format: bytes
             - format: short
@@ -60,8 +60,8 @@ dashboard:
           fill: 0
           nullPointMode: 'null'
           targets:
-            - expr: "sum by (instance) (etcd_debugging_mvcc_db_total_size_in_bytes)"
-              legendFormat: "{{instance}}"
+            - expr: "sum by (pod) (etcd_debugging_mvcc_db_total_size_in_bytes)"
+              legendFormat: "{{pod}}"
           yaxes:
             - format: bytes
             - format: short
@@ -476,6 +476,89 @@ dashboard:
             - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-controller-manager-[0-9]*"})) / 125000'
               legendFormat: "RX {{pod_name}}"
             - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"kube-controller-manager-[0-9]*"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+
+    - title: openshift-kube-scheduler CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name=~"scheduler"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name=~"scheduler"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name=~"scheduler"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name=~"scheduler"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"scheduler"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name=~"scheduler"})) / 125000) * -1'
               legendFormat: "TX {{pod_name}}"
           yaxes:
             - format: short

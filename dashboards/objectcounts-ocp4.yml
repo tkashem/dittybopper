@@ -43,11 +43,29 @@ dashboard:
             show: true
             values: true
           nullPointMode: 'null'
-          span: 6
           targets:
-            - expr: "sum(kube_node_info)"
+            - expr: "count(count by (node) (kube_node_info))"
               legendFormat: "Nodes"
 
+    - title: Namespaces
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Namespaces by "Status"
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          targets:
+            - expr: "sum by (phase) (kube_namespace_status_phase)"
+              legendFormat: "{{phase}}"
 
     - title: Pods
       collapse: true
@@ -84,6 +102,42 @@ dashboard:
           targets:
             - expr: "sum by (node) (kubelet_running_pod_count)"
               legendFormat: "{{node}}"
+        - title: Pod Count by Namespace
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "count by (namespace) (node_namespace_pod:kube_pod_info:)"
+              legendFormat: "{{namespace}}"
+
+    - title: Services
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Services by Namespace
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum by (namespace) (sum(kube_service_labels) without (instance))"
+              legendFormat: "{{namespace}}"
 
     - title: Containers
       collapse: true
