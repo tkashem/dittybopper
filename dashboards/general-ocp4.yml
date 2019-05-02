@@ -27,17 +27,11 @@ dashboard:
           content: "**This dashboard is provided by scale-ci-grafana and managed via Grafyaml**"
           type: text
 
-    - title: Pods vs QPS
+    - title: QPS
       collapse: true
       height: 200px
       showTitle: true
       panels:
-        - title: Pod Count
-          type: graph
-          fill: 0
-          nullPointMode: 'null'
-          targets:
-            - expr: "sum(kubelet_running_pod_count)"
         - title: QPS by Master
           type: graph
           fill: 0

@@ -1,0 +1,122 @@
+---
+dashboard:
+  title: OCP4 Objects
+  timezone: browser
+  templating:
+    - name: interval
+      type: custom
+      current:
+        text: 1m
+        value:
+          - 1m
+      options:
+        - 30s
+        - 1m
+        - 2m
+        - 3m
+        - 4m
+        - 5m
+  time:
+    from: now-1h
+    to: now
+  rows:
+    - title: description row
+      height: 50px
+      panels:
+        - title: scale-ci-grafana
+          content: "**This dashboard is provided by scale-ci-grafana and managed via Grafyaml**"
+          type: text
+
+    - title: Nodes
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Node Count
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum(kube_node_info)"
+              legendFormat: "Nodes"
+
+
+    - title: Pods
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Total Pod Count
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum(kubelet_running_pod_count)"
+              legendFormat: "Pods"
+        - title: Pod Count by Node
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum by (node) (kubelet_running_pod_count)"
+              legendFormat: "{{node}}"
+
+    - title: Containers
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Total Container Count
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum(kubelet_running_container_count)"
+              legendFormat: "Pods"
+        - title: Container Count by Node
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: "sum by (node) (kubelet_running_container_count)"
+              legendFormat: "{{node}}"
