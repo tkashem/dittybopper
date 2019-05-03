@@ -54,12 +54,14 @@ dashboard:
       panels:
         - title: Namespaces by "Status"
           type: graph
-          fill: 0
+          fill: 2
+          stack: true
           legend:
             alignAsTable: true
             avg: true
             max: true
             min: true
+            rightSide: true
             show: true
             values: true
           nullPointMode: 'null'
@@ -102,6 +104,12 @@ dashboard:
           targets:
             - expr: "sum by (node) (kubelet_running_pod_count)"
               legendFormat: "{{node}}"
+
+    - title: Pods by Namespace (Heavy Load)
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
         - title: Pod Count by Namespace
           type: graph
           fill: 0
@@ -113,7 +121,6 @@ dashboard:
             show: true
             values: true
           nullPointMode: 'null'
-          span: 6
           targets:
             - expr: "count by (namespace) (node_namespace_pod:kube_pod_info:)"
               legendFormat: "{{namespace}}"
