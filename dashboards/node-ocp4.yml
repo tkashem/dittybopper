@@ -1,6 +1,6 @@
 ---
 dashboard:
-  title: OCP4 Objects
+  title: OCP4 Node
   timezone: utc
   templating:
     - name: interval
@@ -16,6 +16,12 @@ dashboard:
         - 3m
         - 4m
         - 5m
+    - name: node
+      type: query
+      refresh: 2
+      multi: true
+      includeAll: true
+      query: "label_values(kube_node_info, node)"
   time:
     from: now-1h
     to: now
@@ -47,15 +53,15 @@ dashboard:
             - expr: "count(count by (node) (kube_node_info))"
               legendFormat: "Nodes"
 
-    - title: Namespaces
+    - title: CPU
       collapse: true
       height: 200px
       showTitle: true
       panels:
-        - title: Namespaces by "Status"
+        - title: Utilization
           type: graph
-          fill: 2
-          stack: true
+          fill: 0
+          stack: false
           legend:
             alignAsTable: true
             avg: true
@@ -66,118 +72,83 @@ dashboard:
             values: true
           nullPointMode: 'null'
           targets:
-            - expr: "sum by (phase) (kube_namespace_status_phase)"
-              legendFormat: "{{phase}}"
-
-    - title: Pods
-      collapse: true
-      height: 200px
-      showTitle: true
-      panels:
-        - title: Total Pod Count
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: "sum(kubelet_running_pod_count)"
-              legendFormat: "Pods"
-        - title: Pod Count by Node
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: "sum by (node) (kubelet_running_pod_count)"
+            - expr: "node:node_cpu_utilisation:avg1m{node=~'$node'}"
               legendFormat: "{{node}}"
+          yaxes:
+            - format: percentunit
+            - format: short
 
-    - title: Pods by Namespace (Heavy Load)
+    - title: Memory
       collapse: true
       height: 200px
       showTitle: true
       panels:
-        - title: Pod Count by Namespace
+        - title: Utilization
           type: graph
           fill: 0
+          stack: false
           legend:
             alignAsTable: true
             avg: true
             max: true
             min: true
+            rightSide: true
             show: true
             values: true
           nullPointMode: 'null'
           targets:
-            - expr: "count by (namespace) (node_namespace_pod:kube_pod_info:)"
-              legendFormat: "{{namespace}}"
-
-    - title: Services
-      collapse: true
-      height: 200px
-      showTitle: true
-      panels:
-        - title: Services by Namespace
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: "sum by (namespace) (sum(kube_service_labels) without (instance))"
-              legendFormat: "{{namespace}}"
-
-    - title: Containers
-      collapse: true
-      height: 200px
-      showTitle: true
-      panels:
-        - title: Total Container Count
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: "sum(kubelet_running_container_count)"
-              legendFormat: "Pods"
-        - title: Container Count by Node
-          type: graph
-          fill: 0
-          legend:
-            alignAsTable: true
-            avg: true
-            max: true
-            min: true
-            show: true
-            values: true
-          nullPointMode: 'null'
-          span: 6
-          targets:
-            - expr: "sum by (node) (kubelet_running_container_count)"
+            - expr: "node:node_memory_utilisation:{node=~'$node'}"
               legendFormat: "{{node}}"
+          yaxes:
+            - format: percentunit
+            - format: short
+
+    - title: Disk
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Usage
+          type: graph
+          fill: 0
+          stack: false
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            rightSide: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          targets:
+            - expr: "node:node_filesystem_usage:{} * on (namespace, pod) group_left (node) node_namespace_pod:kube_pod_info:{node=~'$node'}"
+              legendFormat: "{{node}}"
+          yaxes:
+            - format: percentunit
+            - format: short
+
+    - title: Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: Utilization
+          type: graph
+          fill: 0
+          stack: false
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            rightSide: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          targets:
+            - expr: "node:node_net_utilisation:sum_irate{node=~'$node'}"
+              legendFormat: "{{node}}"
+          yaxes:
+            - format: Bps
+            - format: short

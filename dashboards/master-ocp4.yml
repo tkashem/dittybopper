@@ -1,7 +1,7 @@
 ---
 dashboard:
   title: OCP4 Master Metrics
-  timezone: browser
+  timezone: utc
   templating:
     - name: interval
       type: custom
