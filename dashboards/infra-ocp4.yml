@@ -1,0 +1,360 @@
+---
+dashboard:
+  title: OCP4 Infra Node Metrics
+  timezone: utc
+  templating:
+    - name: interval
+      type: custom
+      current:
+        text: 1m
+        value:
+          - 1m
+      options:
+        - 30s
+        - 1m
+        - 2m
+        - 3m
+        - 4m
+        - 5m
+  time:
+    from: now-1h
+    to: now
+  rows:
+    - title: description row
+      height: 50px
+      panels:
+        - title: scale-ci-grafana
+          content: "**This dashboard is provided by scale-ci-grafana and managed via Grafyaml**"
+          type: text
+
+    - title: Ingress Router CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="router"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="router"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="router"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="router"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="router"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="router"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+
+    - title: Registry CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="registry"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="registry"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="registry"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="registry"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="registry"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="registry"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+
+    - title: Prometheus CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="prometheus"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="prometheus"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="prometheus"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="prometheus"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="prometheus"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="prometheus"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+
+    - title: ElasticSearch CPU/Mem/IO/Network
+      collapse: true
+      height: 200px
+      showTitle: true
+      panels:
+        - title: CPU
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_cpu_usage_seconds_total{container_name="elasticsearch"}[$interval]))'
+              legendFormat: "{{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Memory
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            total: false
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (container_memory_rss{container_name="elasticsearch"})'
+              legendFormat: "RSS {{pod_name}}"
+          yaxes:
+            - format: bytes
+            - format: short
+        - title: FileSystem IO
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) (rate(container_fs_reads_total{container_name="elasticsearch"}[$interval]))'
+              legendFormat: "Reads {{pod_name}}"
+            - expr: 'sum by (pod_name) (rate(container_fs_writes_total{container_name="elasticsearch"}[$interval])) * -1'
+              legendFormat: "Writes {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
+        - title: Network Throughput
+          type: graph
+          fill: 0
+          legend:
+            alignAsTable: true
+            avg: true
+            max: true
+            min: true
+            show: true
+            values: true
+          nullPointMode: 'null'
+          span: 6
+          targets:
+            - expr: 'sum by (pod_name) ((rate(container_network_receive_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="elasticsearch"})) / 125000'
+              legendFormat: "RX {{pod_name}}"
+            - expr: '(sum by (pod_name) ((rate(container_network_transmit_bytes_total{}[1m])) + on(instance) group_left(pod_name) (container_cpu_usage_seconds_total{container_name="elasticsearch"})) / 125000) * -1'
+              legendFormat: "TX {{pod_name}}"
+          yaxes:
+            - format: short
+            - format: short
