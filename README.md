@@ -1,36 +1,36 @@
-# scale-ci-grafana
+# Dittybopper
 
-For RHEL ensure that `python-virtualenv` is pre-installed.
+## Getting Started / Prerequisistes
+
+Right now Dittybopper has a few FIXMEs that need to be addressed before it will be more portable across
+k8s/OpenShift environments. It should generally work out-of-the-box with OpenShift 4. Other environments
+will likely have a prerequisite to first stand up a Prometheus pod, and the Dittybopper scripts and 
+templates will need adjustment accordingly. The default dashboard included at 
+[dashboards/dittybopper.json](dashboards/dittybopper.json) is also currently designed for an OpenShift 
+4 deployment with converged rook-ceph storage on the master nodes.
 
 ## Deploy Grafana on OpenShift Cluster with Dashboards
 
 ```
-$ git clone https://github.com/akrzos/scale-ci-grafana.git
-$ cd scale-ci-grafana
-$ virtualenv .venv; . .venv/bin/activate; pip install -r requirements.txt
-$ ./deploy.sh "$grafana_password"
+$ git clone https://github.com/dustinblack/dittybopper.git
+$ cd dittybopper
+$ ./deploy.sh [-c <kubectl_cmd>] [-n <namespace>] [-p <grafana_pwd>]
 ```
 
-Replace `$grafana_password` with a desired grafana password.
+See `./deploy.sh -h` for help.
 
-## Redeploy Dashboards after deploying Grafana
+Simply running `./deploy.sh` with no flags will assume OpenShift, the _dittybopper_ namespace, and _admin_ for the password.
 
-If you edit the yaml in this repo and want to update the dashboards repeat below instructions.
+## Import Dashboard
 
-```
-$ cd scale-ci-grafana
-$ . .venv/bin/activate
-$ grafana-dashboard --config-file .grafyaml_config update dashboards/
-```
-
-## Install Dashboards
-
-If you just want to upload dashboards without deploying Grafana, follow below instructions
+This will import a dashboard (json) into an existing Dittybopper Grafana deployment.
 
 ```
-$ git clone https://github.com/akrzos/scale-ci-grafana.git
-$ cd scale-ci-grafana
-$ virtualenv .venv; . .venv/bin/activate; pip install -r requirements.txt
-$ # Configure your /etc/grafyaml/grafyaml.conf
-$ grafana-dashboards update dashboards/
+$ ./deploy.sh -i <path_to_dashboard_json_file>
+```
+
+## Delete Grafana Deployment
+
+```
+$ ./deploy.sh -d
 ```
