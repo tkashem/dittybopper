@@ -10,11 +10,14 @@ Usage: $(basename "${0}") [-c <kubectl_cmd>] [-n <namespace>] [-p <grafana_pwd>]
 
   -c <kubectl_cmd>  : The (c)ommand to use for k8s admin (defaults to 'oc' for now)
 
+  -m <h>,<h>,<h>    : Comma-separated list of (m)aster node prometheus instances
+                      (expects 3 masters; defaults to 192.168.111.2{0,1,2})
+
   -n <namespace>    : The (n)amespace in which to deploy the Grafana instance
-                     (defaults to 'dittybopper')
+                      (defaults to 'dittybopper')
 
   -p <grafana_pass> : The (p)assword to configure for the Grafana admin user
-                     (defaults to 'admin')
+                      (defaults to 'admin')
 
   -i <dash_path>    : (I)mport dashboard from given path. Using this flag will
                       bypass the deployment process and only do the import to an
@@ -32,16 +35,20 @@ k8s_cmd='oc'
 namespace='dittybopper'
 grafana_pass='admin'
 grafana_default_pass=True
+masters=(192.168.111.20 192.168.111.21 192.168.111.22)
 
 # Other vars
 deploy_template="templates/dittybopper.yaml.template"
 dashboards=($(ls dashboards/defaults/*))
 
 # Capture and act on command options
-while getopts ":c:n:p:i:dh" opt; do
+while getopts ":c:m:n:p:i:dh" opt; do
   case ${opt} in
     c)
       k8s_cmd=${OPTARG}
+      ;;
+    m)
+      masters=(${OPTARG//,/ })
       ;;
     n)
       namespace="${OPTARG}"
@@ -89,6 +96,7 @@ if [[ ${grafana_default_pass} ]]; then
 else
   echo "Using custom grafana password."
 fi
+
 
 # Get environment values
 #FIXME: This is OCP-Specific; needs updating to support k8s
@@ -147,7 +155,7 @@ function dashboard() {
   dashboards=("$@")
   for d in "${dashboards[@]}"; do
     echo "$d"
-    j=$(cat ${d})
+    j=$(sed "s/master0/${masters[0]}/g; s/master1/${masters[1]}/g; s/master2/${masters[2]}/g" ${d})
 
     curl -s -k -XPOST -H "Content-Type: application/json" -H "Accept: application/json" -d "{
         \"dashboard\": $j,
