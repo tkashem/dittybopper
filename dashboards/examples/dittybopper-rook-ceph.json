@@ -58,7 +58,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",node=\"master-0\",container_name=\"osd\"}",
+          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",instance=\"master0:10250\",container_name=\"osd\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{pod_name}} - RSS",
@@ -145,7 +145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",node=\"master-1\",container_name=\"osd\"}",
+          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",instance=\"master1:10250\",container_name=\"osd\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{pod_name}} - RSS",
@@ -232,7 +232,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",node=\"master-2\",container_name=\"osd\"}",
+          "expr": "container_memory_rss{pod_name=~\"rook-ceph-osd.*\",instance=\"master2:10250\",container_name=\"osd\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{pod_name}} - RSS",

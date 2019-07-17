@@ -166,24 +166,24 @@
       },
       "targets": [
         {
-          "expr": "sum(kube_pod_info{ node=\"master-0\"}) \n",
+          "expr": "sum(kube_pod_info{host_ip=\"master0\"}) \n",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "master-0",
+          "legendFormat": "master0",
           "refId": "A"
         },
         {
-          "expr": "sum(kube_pod_info{node=\"master-1\"})\n",
+          "expr": "sum(kube_pod_info{host_ip=\"master1\"})\n",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "master-1",
+          "legendFormat": "master1",
           "refId": "B"
         },
         {
-          "expr": "sum(kube_pod_info{node=\"master-2\"})\n",
+          "expr": "sum(kube_pod_info{host_ip=\"master2\"})\n",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "master-2",
+          "legendFormat": "master2",
           "refId": "C"
         },
         {

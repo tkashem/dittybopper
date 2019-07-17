@@ -57,21 +57,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"192.168.111.20:9100\"}",
+          "expr": "node_load1{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"192.168.111.20:9100\"}",
+          "expr": "node_load5{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"192.168.111.20:9100\"}",
+          "expr": "node_load15{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -157,21 +157,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"192.168.111.21:9100\"}",
+          "expr": "node_load1{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"192.168.111.21:9100\"}",
+          "expr": "node_load5{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"192.168.111.21:9100\"}",
+          "expr": "node_load15{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -257,21 +257,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"192.168.111.22:9100\"}",
+          "expr": "node_load1{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"192.168.111.22:9100\"}",
+          "expr": "node_load5{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"192.168.111.22:9100\"}",
+          "expr": "node_load15{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -402,7 +402,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -411,7 +411,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -420,7 +420,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -428,7 +428,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -436,7 +436,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -444,7 +444,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"192.168.111.20:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -576,7 +576,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -585,7 +585,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -594,7 +594,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -602,7 +602,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -610,7 +610,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -618,7 +618,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"192.168.111.21:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -750,7 +750,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -759,7 +759,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -768,7 +768,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -776,7 +776,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -784,7 +784,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -792,7 +792,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"192.168.111.22:9100\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -927,7 +927,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -936,7 +936,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"})",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master0:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -945,7 +945,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Cache + Buffer",
@@ -953,7 +953,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemFree_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Free",
@@ -961,7 +961,7 @@
           "step": 240
         },
         {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"192.168.111.20:9100\",job=~\".*\"})",
+          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master0:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master0:9100\",job=~\".*\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "SWAP Used",
@@ -1096,7 +1096,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1105,7 +1105,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"})",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master1:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1114,7 +1114,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Cache + Buffer",
@@ -1122,7 +1122,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemFree_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Free",
@@ -1130,7 +1130,7 @@
           "step": 240
         },
         {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"192.168.111.21:9100\",job=~\".*\"})",
+          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master1:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master1:9100\",job=~\".*\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "SWAP Used",
@@ -1265,7 +1265,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1274,7 +1274,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"})",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master2:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1283,7 +1283,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Cache + Buffer",
@@ -1291,7 +1291,7 @@
           "step": 240
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemFree_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "RAM Free",
@@ -1299,7 +1299,7 @@
           "step": 240
         },
         {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"192.168.111.22:9100\",job=~\".*\"})",
+          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master2:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master2:9100\",job=~\".*\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "SWAP Used",
@@ -1391,7 +1391,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"192.168.111.20:9100\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1399,7 +1399,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"192.168.111.20:9100\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1490,14 +1490,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"192.168.111.21:9100\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - read",
           "refId": "B"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"192.168.111.21:9100\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - write",
@@ -1587,14 +1587,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"192.168.111.22:9100\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - read",
           "refId": "B"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"192.168.111.22:9100\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - write",
@@ -1685,7 +1685,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"192.168.111.20:9100\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1693,7 +1693,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"192.168.111.20:9100\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1785,7 +1785,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"192.168.111.21:9100\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1793,7 +1793,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"192.168.111.21:9100\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1885,7 +1885,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"192.168.111.22:9100\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1893,7 +1893,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"192.168.111.22:9100\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1983,7 +1983,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"192.168.111.20:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master0:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1991,7 +1991,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"192.168.111.20:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master0:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2081,7 +2081,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"192.168.111.21:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master1:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2089,7 +2089,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"192.168.111.21:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master1:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2179,7 +2179,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"192.168.111.22:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master2:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2187,7 +2187,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"192.168.111.22:9100\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master2:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2274,7 +2274,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"192.168.111.20.*\"}",
+          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master0.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ service }} - {{ job }}",
@@ -2360,7 +2360,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"192.168.111.21.*\"}",
+          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master1.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ service }} - {{ job }}",
@@ -2446,7 +2446,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"192.168.111.22.*\"}",
+          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master2.*\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ service }} - {{ job }}",
@@ -2533,7 +2533,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_cpu_usage_seconds_total{node=\"master-0\"}[5m])",
+          "expr": "irate(container_cpu_usage_seconds_total{instance=\"master0:10250\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ pod_name }} - {{ service }}",
@@ -2620,7 +2620,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_cpu_usage_seconds_total{node=\"master-1\"}[5m])",
+          "expr": "irate(container_cpu_usage_seconds_total{instance=\"master1:10250\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ pod_name }} - {{ service }}",
@@ -2707,7 +2707,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(container_cpu_usage_seconds_total{node=\"master-2\"}[5m])",
+          "expr": "irate(container_cpu_usage_seconds_total{instance=\"master2:10250\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ pod_name }} - {{ service }}",
