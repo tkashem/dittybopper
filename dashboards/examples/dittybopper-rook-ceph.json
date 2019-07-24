@@ -561,6 +561,19 @@
       }
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 101,
+      "panels": [],
+      "title": "",
+      "type": "row"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "cacheTimeout": null,
@@ -571,7 +584,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 17
       },
       "id": 39,
       "legend": {
@@ -658,7 +671,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 17
       },
       "id": 55,
       "legend": {
@@ -781,7 +794,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 25
       },
       "heatmap": {},
       "hideZeroBuckets": false,
@@ -839,7 +852,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 25
       },
       "id": 96,
       "legend": {
