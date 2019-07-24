@@ -17,7 +17,7 @@
   "gnetId": 10092,
   "graphTooltip": 0,
   "id": "",
-  "iteration": 1560352403806,
+  "iteration": 1563993492102,
   "links": [],
   "panels": [
     {
@@ -929,7 +929,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 18,
+  "schemaVersion": 19,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1039,5 +1039,5 @@
   "timezone": "",
   "title": "Dittybopper - Rook-Ceph",
   "uid": "kVAI9N7Wz",
-  "version": 2
+  "version": 3
 }
