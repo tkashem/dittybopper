@@ -843,33 +843,10 @@
       }
     },
     {
-      "aliasColors": {
-        "Apps": "#629E51",
-        "Buffers": "#614D93",
-        "Cache": "#6D1F62",
-        "Cached": "#511749",
-        "Committed": "#508642",
-        "Free": "#0A437C",
-        "Harware Corrupted - Amount of RAM that the kernel identified as corrupted / not working": "#CFFAFF",
-        "Inactive": "#584477",
-        "PageTables": "#0A50A1",
-        "Page_Tables": "#0A50A1",
-        "RAM_Free": "#E0F9D7",
-        "SWAP Used": "#BF1B00",
-        "Slab": "#806EB7",
-        "Slab_Cache": "#E0752D",
-        "Swap": "#BF1B00",
-        "Swap Used": "#BF1B00",
-        "Swap_Cache": "#C15C17",
-        "Swap_Free": "#2F575E",
-        "Unused": "#EAB839"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
-      "decimals": 2,
-      "description": "Basic memory usage",
       "fill": 4,
       "gridPos": {
         "h": 7,
@@ -877,49 +854,30 @@
         "x": 0,
         "y": 16
       },
-      "id": 49,
+      "id": 96,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": true,
-        "sideWidth": 350,
         "total": false,
         "values": false
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "maxPerRow": 6,
       "nullPointMode": "null",
-      "options": {},
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "RAM Total",
-          "color": "#E0F9D7",
-          "fill": 0,
-          "stack": false
-        },
-        {
-          "alias": "RAM Cache + Buffer",
-          "color": "#052B51"
-        },
-        {
-          "alias": "RAM Free",
-          "color": "#7EB26D"
-        },
-        {
-          "alias": "Avaliable",
-          "color": "#DEDAF7",
-          "fill": 0,
-          "stack": false
+          "alias": "Total",
+          "stack": false,
+          "fill": 0
         }
       ],
       "spaceLength": 10,
@@ -927,59 +885,46 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "RAM Total",
           "refId": "A",
-          "step": 240
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"}",
+          "legendFormat": "Total",
+          "intervalFactor": 2,
+          "hide": false
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master0:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"})",
+          "expr": "node_memory_Active_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Used",
-          "refId": "D",
-          "step": 240
+          "legendFormat": "Active",
+          "refId": "F"
         },
         {
           "expr": "node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Cache + Buffer",
-          "refId": "B",
-          "step": 240
+          "legendFormat": "Cached + Buffers",
+          "refId": "B"
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"master0:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master0:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"})",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Free",
-          "refId": "F",
-          "step": 240
-        },
-        {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master0:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master0:9100\",job=~\".*\"})",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "SWAP Used",
-          "refId": "G",
-          "step": 240
+          "legendFormat": "Available",
+          "refId": "D"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Memory Basic : Master-0",
+      "title": "System Memory : Master-0",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -991,11 +936,12 @@
       "yaxes": [
         {
           "format": "bytes",
-          "label": "",
+          "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
-          "show": true
+          "min": null,
+          "show": true,
+          "decimals": 1
         },
         {
           "format": "short",
@@ -1009,86 +955,50 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "transparent": true,
+      "options": {
+        "dataLinks": []
+      },
+      "fillGradient": 0,
+      "timeRegions": []
     },
     {
-      "aliasColors": {
-        "Apps": "#629E51",
-        "Buffers": "#614D93",
-        "Cache": "#6D1F62",
-        "Cached": "#511749",
-        "Committed": "#508642",
-        "Free": "#0A437C",
-        "Harware Corrupted - Amount of RAM that the kernel identified as corrupted / not working": "#CFFAFF",
-        "Inactive": "#584477",
-        "PageTables": "#0A50A1",
-        "Page_Tables": "#0A50A1",
-        "RAM_Free": "#E0F9D7",
-        "SWAP Used": "#BF1B00",
-        "Slab": "#806EB7",
-        "Slab_Cache": "#E0752D",
-        "Swap": "#BF1B00",
-        "Swap Used": "#BF1B00",
-        "Swap_Cache": "#C15C17",
-        "Swap_Free": "#2F575E",
-        "Unused": "#EAB839"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
-      "decimals": 2,
-      "description": "Basic memory usage",
       "fill": 4,
       "gridPos": {
         "h": 7,
         "w": 8,
-        "x": 8,
+        "x": 0,
         "y": 16
       },
-      "id": 50,
+      "id": 97,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": true,
-        "sideWidth": 350,
         "total": false,
         "values": false
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "maxPerRow": 6,
       "nullPointMode": "null",
-      "options": {},
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "RAM Total",
-          "color": "#E0F9D7",
-          "fill": 0,
-          "stack": false
-        },
-        {
-          "alias": "RAM Cache + Buffer",
-          "color": "#052B51"
-        },
-        {
-          "alias": "RAM Free",
-          "color": "#7EB26D"
-        },
-        {
-          "alias": "Avaliable",
-          "color": "#DEDAF7",
-          "fill": 0,
-          "stack": false
+          "alias": "Total",
+          "stack": false,
+          "fill": 0
         }
       ],
       "spaceLength": 10,
@@ -1096,59 +1006,46 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "RAM Total",
           "refId": "A",
-          "step": 240
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"}",
+          "legendFormat": "Total",
+          "intervalFactor": 2,
+          "hide": false
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master1:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"})",
+          "expr": "node_memory_Active_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Used",
-          "refId": "D",
-          "step": 240
+          "legendFormat": "Active",
+          "refId": "F"
         },
         {
           "expr": "node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Cache + Buffer",
-          "refId": "B",
-          "step": 240
+          "legendFormat": "Cached + Buffers",
+          "refId": "B"
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"master1:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master1:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"})",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Free",
-          "refId": "F",
-          "step": 240
-        },
-        {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master1:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master1:9100\",job=~\".*\"})",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "SWAP Used",
-          "refId": "G",
-          "step": 240
+          "legendFormat": "Available",
+          "refId": "D"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Memory Basic : Master-1",
+      "title": "System Memory : Master-1",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1160,11 +1057,12 @@
       "yaxes": [
         {
           "format": "bytes",
-          "label": "",
+          "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
-          "show": true
+          "min": null,
+          "show": true,
+          "decimals": 1
         },
         {
           "format": "short",
@@ -1178,86 +1076,50 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "transparent": true,
+      "options": {
+        "dataLinks": []
+      },
+      "fillGradient": 0,
+      "timeRegions": []
     },
     {
-      "aliasColors": {
-        "Apps": "#629E51",
-        "Buffers": "#614D93",
-        "Cache": "#6D1F62",
-        "Cached": "#511749",
-        "Committed": "#508642",
-        "Free": "#0A437C",
-        "Harware Corrupted - Amount of RAM that the kernel identified as corrupted / not working": "#CFFAFF",
-        "Inactive": "#584477",
-        "PageTables": "#0A50A1",
-        "Page_Tables": "#0A50A1",
-        "RAM_Free": "#E0F9D7",
-        "SWAP Used": "#BF1B00",
-        "Slab": "#806EB7",
-        "Slab_Cache": "#E0752D",
-        "Swap": "#BF1B00",
-        "Swap Used": "#BF1B00",
-        "Swap_Cache": "#C15C17",
-        "Swap_Free": "#2F575E",
-        "Unused": "#EAB839"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
-      "decimals": 2,
-      "description": "Basic memory usage",
       "fill": 4,
       "gridPos": {
         "h": 7,
         "w": 8,
-        "x": 16,
+        "x": 0,
         "y": 16
       },
-      "id": 51,
+      "id": 98,
       "legend": {
         "alignAsTable": false,
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "rightSide": false,
         "show": true,
-        "sideWidth": 350,
         "total": false,
         "values": false
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "maxPerRow": 6,
       "nullPointMode": "null",
-      "options": {},
       "percentage": false,
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
-          "alias": "RAM Total",
-          "color": "#E0F9D7",
-          "fill": 0,
-          "stack": false
-        },
-        {
-          "alias": "RAM Cache + Buffer",
-          "color": "#052B51"
-        },
-        {
-          "alias": "RAM Free",
-          "color": "#7EB26D"
-        },
-        {
-          "alias": "Avaliable",
-          "color": "#DEDAF7",
-          "fill": 0,
-          "stack": false
+          "alias": "Total",
+          "stack": false,
+          "fill": 0
         }
       ],
       "spaceLength": 10,
@@ -1265,59 +1127,46 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"}",
-          "format": "time_series",
-          "hide": false,
-          "intervalFactor": 2,
-          "legendFormat": "RAM Total",
           "refId": "A",
-          "step": 240
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"}",
+          "legendFormat": "Total",
+          "intervalFactor": 2,
+          "hide": false
         },
         {
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"} - node_memory_MemFree_bytes{instance=~\"master2:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"})",
+          "expr": "node_memory_Active_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Used",
-          "refId": "D",
-          "step": 240
+          "legendFormat": "Active",
+          "refId": "F"
         },
         {
           "expr": "node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Cache + Buffer",
-          "refId": "B",
-          "step": 240
+          "legendFormat": "Cached + Buffers",
+          "refId": "B"
         },
         {
-          "expr": "node_memory_MemFree_bytes{instance=~\"master2:9100\",job=~\".*\"}",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master2:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"})",
           "format": "time_series",
+          "hide": false,
           "intervalFactor": 2,
-          "legendFormat": "RAM Free",
-          "refId": "F",
-          "step": 240
-        },
-        {
-          "expr": "(node_memory_SwapTotal_bytes{instance=~\"master2:9100\",job=~\".*\"} - node_memory_SwapFree_bytes{instance=~\"master2:9100\",job=~\".*\"})",
-          "format": "time_series",
-          "intervalFactor": 2,
-          "legendFormat": "SWAP Used",
-          "refId": "G",
-          "step": 240
+          "legendFormat": "Available",
+          "refId": "D"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
-      "timeRegions": [],
       "timeShift": null,
-      "title": "Memory Basic : Master-2",
+      "title": "System Memory : Master-2",
       "tooltip": {
         "shared": true,
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": true,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -1329,11 +1178,12 @@
       "yaxes": [
         {
           "format": "bytes",
-          "label": "",
+          "label": null,
           "logBase": 1,
           "max": null,
-          "min": "0",
-          "show": true
+          "min": null,
+          "show": true,
+          "decimals": 1
         },
         {
           "format": "short",
@@ -1347,7 +1197,13 @@
       "yaxis": {
         "align": false,
         "alignLevel": null
-      }
+      },
+      "transparent": true,
+      "options": {
+        "dataLinks": []
+      },
+      "fillGradient": 0,
+      "timeRegions": []
     },
     {
       "aliasColors": {},
