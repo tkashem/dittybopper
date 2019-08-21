@@ -57,21 +57,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"master0\"}",
+          "expr": "node_load1{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"master0\"}",
+          "expr": "node_load5{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"master0\"}",
+          "expr": "node_load15{instance=\"master0:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -157,21 +157,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"master1\"}",
+          "expr": "node_load1{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"master1\"}",
+          "expr": "node_load5{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"master1\"}",
+          "expr": "node_load15{instance=\"master1:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -257,21 +257,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_load1{instance=\"master2\"}",
+          "expr": "node_load1{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 1m",
           "refId": "A"
         },
         {
-          "expr": "node_load5{instance=\"master2\"}",
+          "expr": "node_load5{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 5m",
           "refId": "B"
         },
         {
-          "expr": "node_load15{instance=\"master2\"}",
+          "expr": "node_load15{instance=\"master2:9100\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "Load - 15m",
@@ -402,7 +402,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -411,7 +411,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -420,7 +420,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -428,7 +428,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -436,7 +436,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -444,7 +444,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master0\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master0:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -576,7 +576,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -585,7 +585,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -594,7 +594,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -602,7 +602,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -610,7 +610,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -618,7 +618,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master1\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master1:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -750,7 +750,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=\"system\",instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -759,7 +759,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='user',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -768,7 +768,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode='iowait',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Iowait",
@@ -776,7 +776,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (instance)(rate(node_cpu_seconds_total{mode=~\".*irq\",instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy IRQs",
@@ -784,7 +784,7 @@
           "step": 240
         },
         {
-          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum (rate(node_cpu_seconds_total{mode!='idle',mode!='user',mode!='system',mode!='iowait',mode!='irq',mode!='softirq',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Busy Other",
@@ -792,7 +792,7 @@
           "step": 240
         },
         {
-          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master2\",job=~\".*\"}[1m])) * 100",
+          "expr": "sum by (mode)(rate(node_cpu_seconds_total{mode='idle',instance=~\"master2:9100\",job=~\".*\"}[1m])) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Idle",
@@ -886,13 +886,13 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master0\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "legendFormat": "Total",
           "intervalFactor": 2,
           "hide": false
         },
         {
-          "expr": "node_memory_Active_bytes{instance=~\"master0\",job=~\".*\"}",
+          "expr": "node_memory_Active_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -900,7 +900,7 @@
           "refId": "F"
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"master0\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -908,7 +908,7 @@
           "refId": "B"
         },
         {
-          "expr": "node_memory_MemAvailable_bytes{instance=~\"master0\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master0\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0\",job=~\".*\"})",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master0:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master0:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master0:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1007,13 +1007,13 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master1\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "legendFormat": "Total",
           "intervalFactor": 2,
           "hide": false
         },
         {
-          "expr": "node_memory_Active_bytes{instance=~\"master1\",job=~\".*\"}",
+          "expr": "node_memory_Active_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1021,7 +1021,7 @@
           "refId": "F"
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"master1\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1029,7 +1029,7 @@
           "refId": "B"
         },
         {
-          "expr": "node_memory_MemAvailable_bytes{instance=~\"master1\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master1\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1\",job=~\".*\"})",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master1:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master1:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master1:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1128,13 +1128,13 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "node_memory_MemTotal_bytes{instance=~\"master2\",job=~\".*\"}",
+          "expr": "node_memory_MemTotal_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "legendFormat": "Total",
           "intervalFactor": 2,
           "hide": false
         },
         {
-          "expr": "node_memory_Active_bytes{instance=~\"master2\",job=~\".*\"}",
+          "expr": "node_memory_Active_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1142,7 +1142,7 @@
           "refId": "F"
         },
         {
-          "expr": "node_memory_Cached_bytes{instance=~\"master2\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2\",job=~\".*\"}",
+          "expr": "node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"}",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1150,7 +1150,7 @@
           "refId": "B"
         },
         {
-          "expr": "node_memory_MemAvailable_bytes{instance=~\"master2\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master2\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2\",job=~\".*\"})",
+          "expr": "node_memory_MemAvailable_bytes{instance=~\"master2:9100\",job=~\".*\"} - (node_memory_Cached_bytes{instance=~\"master2:9100\",job=~\".*\"} + node_memory_Buffers_bytes{instance=~\"master2:9100\",job=~\".*\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -1247,7 +1247,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master0\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1255,7 +1255,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master0\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1346,14 +1346,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master1\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - read",
           "refId": "B"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master1\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - write",
@@ -1443,14 +1443,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master2\"}[1m])",
+          "expr": "irate(node_disk_read_bytes_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - read",
           "refId": "B"
         },
         {
-          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master2\"}[1m])",
+          "expr": "irate(node_disk_written_bytes_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{device}} - write",
@@ -1541,7 +1541,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master0\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1549,7 +1549,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master0\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master0:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1641,7 +1641,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master1\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1649,7 +1649,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master1\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master1:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1741,7 +1741,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master2\"}[1m])",
+          "expr": "irate(node_disk_reads_completed_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1749,7 +1749,7 @@
           "refId": "C"
         },
         {
-          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master2\"}[1m])",
+          "expr": "irate(node_disk_writes_completed_total{device=~\"$block_device\",instance=\"master2:9100\"}[1m])",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1839,7 +1839,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"master0\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master0:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1847,7 +1847,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"master0\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master0:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1937,7 +1937,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"master1\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master1:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -1945,7 +1945,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"master1\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master1:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2035,7 +2035,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(node_network_receive_bytes_total{instance=\"master2\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_receive_bytes_total{instance=\"master2:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -2043,7 +2043,7 @@
           "refId": "A"
         },
         {
-          "expr": "irate(node_network_transmit_bytes_total{instance=\"master2\",device=~\"$net_device\"}[1m]) * 8",
+          "expr": "irate(node_network_transmit_bytes_total{instance=\"master2:9100\",device=~\"$net_device\"}[1m]) * 8",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
