@@ -2656,7 +2656,7 @@
         "align": false,
         "alignLevel": null
       }
-    },
+    }
   ],
   "refresh": "10s",
   "schemaVersion": 18,
