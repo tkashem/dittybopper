@@ -21,6 +21,7 @@
   "links": [],
   "panels": [
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -121,6 +122,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -221,6 +223,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -321,6 +324,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {
         "Busy": "#EAB839",
         "Busy Iowait": "#890F02",
@@ -340,7 +344,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
       "decimals": 2,
       "description": "Basic CPU info",
       "fill": 4,
@@ -495,6 +498,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {
         "Busy": "#EAB839",
         "Busy Iowait": "#890F02",
@@ -514,7 +518,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
       "decimals": 2,
       "description": "Basic CPU info",
       "fill": 4,
@@ -669,6 +672,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {
         "Busy": "#EAB839",
         "Busy Iowait": "#890F02",
@@ -688,7 +692,6 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Cluster Prometheus",
       "decimals": 2,
       "description": "Basic CPU info",
       "fill": 4,
@@ -843,6 +846,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -964,6 +968,7 @@
       "timeRegions": []
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1085,6 +1090,7 @@
       "timeRegions": []
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1206,6 +1212,7 @@
       "timeRegions": []
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1306,6 +1313,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1403,6 +1411,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1500,6 +1509,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1600,6 +1610,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1700,6 +1711,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1800,6 +1812,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1898,6 +1911,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -1996,6 +2010,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -2094,6 +2109,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -2107,19 +2123,23 @@
       },
       "id": 63,
       "legend": {
-        "avg": false,
-        "current": false,
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
-        "values": false
+        "values":true 
       },
       "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2130,10 +2150,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master0.*\"}",
+          "expr": "container_memory_rss{instance=\"master0:10250\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ service }} - {{ job }}",
+          "legendFormat": "{{ job_name }} - {{ container_name }}",
           "refId": "A"
         }
       ],
@@ -2171,7 +2191,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -2180,6 +2200,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -2191,21 +2212,25 @@
         "x": 8,
         "y": 44
       },
-      "id": 64,
+      "id": 99,
       "legend": {
-        "avg": false,
-        "current": false,
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
-        "values": false
+        "values":true 
       },
       "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2216,10 +2241,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master1.*\"}",
+          "expr": "container_memory_rss{instance=\"master1:10250\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ service }} - {{ job }}",
+          "legendFormat": "{{ job_name }} - {{ container_name }}",
           "refId": "A"
         }
       ],
@@ -2257,7 +2282,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -2266,6 +2291,7 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -2277,21 +2303,25 @@
         "x": 16,
         "y": 44
       },
-      "id": 65,
+      "id": 100,
       "legend": {
-        "avg": false,
-        "current": false,
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
         "max": false,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
-        "values": false
+        "values":true 
       },
       "lines": true,
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2302,10 +2332,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "process_resident_memory_bytes{service=~\".*\",endpoint=~\".*\",instance=~\"master2.*\"}",
+          "expr": "container_memory_rss{instance=\"master2:10250\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "{{ service }} - {{ job }}",
+          "legendFormat": "{{ job_name }} - {{ container_name }}",
           "refId": "A"
         }
       ],
@@ -2343,7 +2373,7 @@
           "logBase": 1,
           "max": null,
           "min": null,
-          "show": true
+          "show": false
         }
       ],
       "yaxis": {
@@ -2352,11 +2382,13 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
@@ -2365,8 +2397,9 @@
       },
       "id": 69,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
-        "current": false,
+        "current": true,
         "hideZero": true,
         "max": true,
         "min": true,
@@ -2378,7 +2411,9 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2439,33 +2474,38 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 8,
         "y": 51
       },
-      "id": 70,
+      "id": 101,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
-        "current": false,
+        "current": true,
         "hideZero": true,
-        "max": false,
-        "min": false,
+        "max": true,
+        "min": true,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2526,33 +2566,38 @@
       }
     },
     {
+      "datasource": "$datasource",
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 16,
         "y": 51
       },
-      "id": 71,
+      "id": 102,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
-        "current": false,
+        "current": true,
         "hideZero": true,
-        "max": false,
-        "min": false,
+        "max": true,
+        "min": true,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
-      "options": {},
+      "options": {
+        "dataLinks": []
+      },
       "percentage": false,
       "pointradius": 2,
       "points": false,
@@ -2574,7 +2619,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU  Usage : Master-2",
+      "title": "CPU Usage : Master-2",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2611,7 +2656,7 @@
         "align": false,
         "alignLevel": null
       }
-    }
+    },
   ],
   "refresh": "10s",
   "schemaVersion": 18,
