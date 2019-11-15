@@ -11,7 +11,7 @@ Usage: $(basename "${0}") [-c <kubectl_cmd>] [-n <namespace>] [-p <grafana_pwd>]
   -c <kubectl_cmd>  : The (c)ommand to use for k8s admin (defaults to 'oc' for now)
 
   -m <h>,<h>,<h>    : Comma-separated list of (m)aster node prometheus instances
-                      (expects 3 masters; defaults to master-{0,1,2})
+                      (overrides detected node names; expects 3 masters)
 
   -n <namespace>    : The (n)amespace in which to deploy the Grafana instance
                       (defaults to 'dittybopper')
@@ -35,7 +35,7 @@ k8s_cmd='oc'
 namespace='dittybopper'
 grafana_pass='admin'
 grafana_default_pass=True
-masters=(master-0 master-1 master-2)
+masters=($($k8s_cmd get nodes -l node-role.kubernetes.io/master -o name | awk -F / '{print $2}'))
 
 # Other vars
 deploy_template="templates/dittybopper.yaml.template"
