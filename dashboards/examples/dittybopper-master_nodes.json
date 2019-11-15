@@ -83,7 +83,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Load : Master-0",
+      "title": "Load : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -184,7 +184,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Load : Master-1",
+      "title": "Load : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -285,7 +285,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Load : Master-2",
+      "title": "Load : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -459,7 +459,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Basic : Master-0",
+      "title": "CPU Basic : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -633,7 +633,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Basic : Master-1",
+      "title": "CPU Basic : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -807,7 +807,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Basic : Master-2",
+      "title": "CPU Basic : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -923,7 +923,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "System Memory : Master-0",
+      "title": "System Memory : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1045,7 +1045,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "System Memory : Master-1",
+      "title": "System Memory : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1167,7 +1167,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "System Memory : Master-2",
+      "title": "System Memory : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1274,7 +1274,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk Throughput : Master-0",
+      "title": "Disk Throughput : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1372,7 +1372,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk Throughput : Master-1",
+      "title": "Disk Throughput : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1470,7 +1470,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk Throughput : Master-2",
+      "title": "Disk Throughput : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1571,7 +1571,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk IOPS : Master-0",
+      "title": "Disk IOPS : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1672,7 +1672,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk IOPS : Master-1",
+      "title": "Disk IOPS : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1773,7 +1773,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Disk IOPS : Master-2",
+      "title": "Disk IOPS : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1872,7 +1872,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Network Utilization : Master-0",
+      "title": "Network Utilization : master0",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1971,7 +1971,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Network Utilization : Master-1",
+      "title": "Network Utilization : master1",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2070,7 +2070,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Network Utilization : Master-2",
+      "title": "Network Utilization : master2",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -2161,7 +2161,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Process RSS : Master-0",
+      "title": "Process RSS : master0",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2252,7 +2252,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Process RSS : Master-1",
+      "title": "Process RSS : master1",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2343,7 +2343,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Process RSS : Master-2",
+      "title": "Process RSS : master2",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2435,7 +2435,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Usage : Master-0",
+      "title": "CPU Usage : master0",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2527,7 +2527,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Usage : Master-1",
+      "title": "CPU Usage : master1",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -2619,7 +2619,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "CPU Usage : Master-2",
+      "title": "CPU Usage : master2",
       "tooltip": {
         "shared": true,
         "sort": 2,

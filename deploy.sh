@@ -7,17 +7,22 @@ Deploys a mutable grafana pod with default dashboards for monitoring
 system submetrics during workload/benchmark runs
 
 Usage: $(basename "${0}") [-c <kubectl_cmd>] [-n <namespace>] [-p <grafana_pwd>]
+                          [-m <master0>,<master1>,<master2>]
+
+       $(basename "${0}") [-i <dash_path>]
+
+       $(basename "${0}") [-d] [-n <namespace>]
 
   -c <kubectl_cmd>  : The (c)ommand to use for k8s admin (defaults to 'oc' for now)
-
-  -m <h>,<h>,<h>    : Comma-separated list of (m)aster node prometheus instances
-                      (expects 3 masters; defaults to master-{0,1,2})
 
   -n <namespace>    : The (n)amespace in which to deploy the Grafana instance
                       (defaults to 'dittybopper')
 
   -p <grafana_pass> : The (p)assword to configure for the Grafana admin user
                       (defaults to 'admin')
+
+  -m <h>,<h>,<h>    : Comma-separated list of (m)aster node prometheus instances
+                      (overrides detected node names; expects 3 masters)
 
   -i <dash_path>    : (I)mport dashboard from given path. Using this flag will
                       bypass the deployment process and only do the import to an
@@ -35,7 +40,7 @@ k8s_cmd='oc'
 namespace='dittybopper'
 grafana_pass='admin'
 grafana_default_pass=True
-masters=(master-0 master-1 master-2)
+masters=($($k8s_cmd get nodes -l node-role.kubernetes.io/master -o name | awk -F / '{print $2}'))
 
 # Other vars
 deploy_template="templates/dittybopper.yaml.template"
