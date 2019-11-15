@@ -151,7 +151,7 @@ function grafana() {
 }
 
 function dashboard() {
-  dittybopper_route=`$k8s_cmd get routes -n $namespace -o=json | jq -r '.items[0].spec.host'`
+  dittybopper_route=`$k8s_cmd get routes -n $namespace -o=jsonpath='{.items[0].spec.host}'`
   dashboards=("$@")
   for d in "${dashboards[@]}"; do
     echo "$d"
