@@ -1,5 +1,7 @@
 # Dittybopper
 
+![Dittybopper screenshot](dittybopper_screenshot.png)
+
 ## whatis
 
 Dittyboppter is a quick-and-dirty way to deploy system-level submetric monitoring with Grafana
