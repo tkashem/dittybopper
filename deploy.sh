@@ -48,7 +48,7 @@ while getopts ":c:m:n:p:i:dh" opt; do
       k8s_cmd=${OPTARG}
       ;;
     m)
-      masters=(${OPTARG//,/ })
+      masters=("${OPTARG//,/ }")
       ;;
     n)
       namespace="${OPTARG}"
@@ -102,9 +102,9 @@ fi
 #FIXME: This is OCP-Specific; needs updating to support k8s
 echo ""
 echo -e "\033[32mGetting environment vars...\033[0m"
-prom_url=`$k8s_cmd get secrets -n openshift-monitoring grafana-datasources -o go-template='{{index .data "prometheus.yaml"}}' | base64 --decode | jq '.datasources[0].url'`
+prom_url=$($k8s_cmd get secrets -n openshift-monitoring grafana-datasources -o go-template='{{index .data "prometheus.yaml"}}' | base64 --decode | jq '.datasources[0].url')
 prom_user="internal"
-prom_pass=`$k8s_cmd get secrets -n openshift-monitoring grafana-datasources -o go-template='{{index .data "prometheus.yaml"}}' | base64 --decode | jq '.datasources[0].basicAuthPassword'`
+prom_pass=$($k8s_cmd get secrets -n openshift-monitoring grafana-datasources -o go-template='{{index .data "prometheus.yaml"}}' | base64 --decode | jq '.datasources[0].basicAuthPassword')
 echo "Prometheus URL is: $prom_url"
 echo "Prometheus password collected."
 
@@ -116,8 +116,8 @@ function get_pod() {
   pod_name="False"
   until [ $pod_name != "False" ] ; do
     sleep $sleep_time
-    pod_name=$($k8s_cmd get pods -l $1 -n $namespace -o name | cut -d/ -f2)
-    if [ -z $pod_name ]; then
+    pod_name=$($k8s_cmd get pods -l "$1" -n "$namespace" -o name | cut -d/ -f2)
+    if [ -z "$pod_name" ]; then
       pod_name="False"
     fi
     counter=$(( counter+1 ))
@@ -125,42 +125,37 @@ function get_pod() {
       return 1
     fi
   done
-  echo $pod_name
+  echo "$pod_name"
   return 0
 }
 
 function namespace() {
   # Create namespace
-  cat <<EOF | $k8s_cmd $1 -f -
-  apiVersion: v1
-  kind: Namespace
-  metadata:
-    name: $namespace
-EOF
+  $k8s_cmd "$1" namespace "$namespace"
 }
 
 function grafana() {
-  sed -e "s;\${GRAFANA_ADMIN_PASSWORD};${grafana_pass};g" -e "s;\${PROMETHEUS_URL};${prom_url};g" -e "s;\${PROMETHEUS_USER};${prom_user};g" -e "s;\${PROMETHEUS_PASSWORD};${prom_pass};g" $deploy_template | $k8s_cmd $1 -f -
+  sed -e "s;\${GRAFANA_ADMIN_PASSWORD};${grafana_pass};g" -e "s;\${PROMETHEUS_URL};${prom_url};g" -e "s;\${PROMETHEUS_USER};${prom_user};g" -e "s;\${PROMETHEUS_PASSWORD};${prom_pass};g" $deploy_template | $k8s_cmd "$1" -f -
 
   if [[ ! $delete ]]; then
     echo ""
     echo -e "\033[32mWaiting for pod to be up and ready...\033[0m"
     dittybopper_pod=$(get_pod 'app=dittybopper' 60)
-    $k8s_cmd wait --for=condition=Ready -n $namespace pods/$dittybopper_pod --timeout=60s
+    $k8s_cmd wait --for=condition=Ready -n "$namespace" pods/"$dittybopper_pod" --timeout=60s
   fi
 }
 
 function dashboard() {
-  dittybopper_route=`$k8s_cmd get routes -n $namespace -o=jsonpath='{.items[0].spec.host}'`
+  dittybopper_route=$($k8s_cmd get routes -n "$namespace" -o=jsonpath='{.items[0].spec.host}')
   dashboards=("$@")
   for d in "${dashboards[@]}"; do
     echo "$d"
-    j=$(sed "s/master0/${masters[0]}/g; s/master1/${masters[1]}/g; s/master2/${masters[2]}/g" ${d})
+    j=$(sed "s/master0/${masters[0]}/g; s/master1/${masters[1]}/g; s/master2/${masters[2]}/g" "${d}")
 
     curl -s -k -XPOST -H "Content-Type: application/json" -H "Accept: application/json" -d "{
         \"dashboard\": $j,
         \"overwrite\": true
-      }" http://admin:${grafana_pass}@${dittybopper_route}/api/dashboards/db >/dev/null 2>&1
+      }" "http://admin:${grafana_pass}@${dittybopper_route}/api/dashboards/db" >/dev/null 2>&1
   done
 }
 
@@ -180,7 +175,7 @@ elif [[ $dash_import ]]; then
 else
   echo ""
   echo -e "\033[32mCreating namespace...\033[0m"
-  namespace "apply"
+  namespace "create"
   echo ""
   echo -e "\033[32mDeploying Grafana...\033[0m"
   grafana "apply"
