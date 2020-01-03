@@ -5,9 +5,9 @@
 ## whatis
 
 Dittyboppter is a quick-and-dirty way to deploy system-level submetric monitoring with Grafana
-in an OpenShift 4 environment. It deploys a stand-alone transient Grafana pod with default
-dashboards to monitor things like CPU, memory, network, and disk activity. There are also
-dashboards for monitoring rook-ceph components, and the deployment can be customized with your
+in an OpenShift 4 environment. It deploys a stand-alone mutable Grafana pod with default
+dashboards to monitor things like CPU, memory, network, and disk activity. There are other
+dashboards available in [arsenal](https://github.com/cloud-bulldozer/arsenal), and the deployment can be customized with your
 own dashboards. The Grafana charts expect to receive metrics from an existing Prometheus
 deployment and node exporters.
 
@@ -16,10 +16,9 @@ deployment and node exporters.
 Right now Dittybopper has a number of FIXMEs that need to be addressed before it will be more portable across
 k8s/OpenShift environments. It should generally deploy out-of-the-box with OpenShift 4. Other environments
 will likely have a prerequisite to first stand up a Prometheus pod, and the Dittybopper scripts and 
-templates will need adjustment accordingly. The default dashboard included at 
-[dashboards/defaults/dittybopper-master_nodes.json](dashboards/defaults/dittybopper-master_nodes.json)
-is currently designed for a 3-node OpenShift 4 deployment with converged rook-ceph storage on the master
-nodes.
+templates will need adjustment accordingly. The default dashboard included via
+[arsenal/system-metrics-dashboards/grafana/master_nodes.json](https://github.com/cloud-bulldozer/arsenal/blob/master/system-metrics-dashboards/grafana/master_nodes.json)
+is currently designed for a 3-master OpenShift 4 deployment.
 
 ## Contribute
 
@@ -41,7 +40,8 @@ Simply running `./deploy.sh` with no flags will assume OpenShift, the _dittybopp
 
 ### Import Dashboard
 
-This will import a dashboard (json) into an existing Dittybopper Grafana deployment.
+This will import a dashboard (json) into an existing Dittybopper Grafana deployment. The dashboard path
+can be either a local file or a URL beginning with http.
 
 ```
 $ ./deploy.sh -i <path_to_dashboard_json_file>

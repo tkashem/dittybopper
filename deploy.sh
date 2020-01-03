@@ -26,7 +26,8 @@ Usage: $(basename "${0}") [-c <kubectl_cmd>] [-n <namespace>] [-p <grafana_pwd>]
 
   -i <dash_path>    : (I)mport dashboard from given path. Using this flag will
                       bypass the deployment process and only do the import to an
-                      already-running Grafana pod.
+                      already-running Grafana pod. Can be a local path or a remote
+                      URL beginning with http.
 
   -d                : (D)elete an existing deployment
 
@@ -44,7 +45,7 @@ masters=($($k8s_cmd get nodes -l node-role.kubernetes.io/master -o name | awk -F
 
 # Other vars
 deploy_template="templates/dittybopper.yaml.template"
-dashboards=($(ls dashboards/defaults/*))
+dashboards=(https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/system-metrics-dashboards/grafana/master_nodes.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/kube-cluster-dashboard/grafana/kube_cluster.json)
 
 # Capture and act on command options
 while getopts ":c:m:n:p:i:dh" opt; do
@@ -154,8 +155,16 @@ function dashboard() {
   dittybopper_route=$($k8s_cmd get routes -n "$namespace" -o=jsonpath='{.items[0].spec.host}')
   dashboards=("$@")
   for d in "${dashboards[@]}"; do
-    echo "$d"
-    j=$(sed "s/master0/${masters[0]}/g; s/master1/${masters[1]}/g; s/master2/${masters[2]}/g" "${d}")
+    if [[ $d =~ ^http ]]; then
+      echo "Fetching remote dashboard $d"
+      dashfile="/tmp/$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 8)"
+      wget -q $d -O $dashfile >/dev/null
+    else
+      echo "Using local dashboard $d"
+      dashfile=$d
+    fi
+    echo "Importing dashboard $dashfile"
+    j=$(sed "s/master0/${masters[0]}/g; s/master1/${masters[1]}/g; s/master2/${masters[2]}/g" "${dashfile}")
 
     curl -s -k -XPOST -H "Content-Type: application/json" -H "Accept: application/json" -d "{
         \"dashboard\": $j,
