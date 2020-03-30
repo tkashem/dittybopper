@@ -44,7 +44,7 @@ grafana_default_pass=True
 
 # Other vars
 deploy_template="templates/dittybopper.yaml.template"
-dashboards=(https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/openshift-performance-dashboard/grafana/on-cluster-latest.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/system-metrics-dashboards/grafana/master_nodes.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/kube-cluster-dashboard/grafana/kube_cluster.json)
+dashboards=(dashboards/apiserver-benchmark.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/openshift-performance-dashboard/grafana/on-cluster-latest.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/system-metrics-dashboards/grafana/master_nodes.json https://raw.githubusercontent.com/cloud-bulldozer/arsenal/master/kube-cluster-dashboard/grafana/kube_cluster.json)
 
 # Capture and act on command options
 while getopts ":c:m:n:p:i:dh" opt; do
