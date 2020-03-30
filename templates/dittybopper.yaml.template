@@ -49,6 +49,13 @@ spec:
       containers:
       - name: dittybopper
         image: docker.io/grafana/grafana
+        env:
+        - name: GF_AUTH_ANONYMOUS_ENABLED
+          value: "true"
+        - name: GF_AUTH_DISABLE_LOGIN_FORM
+          value: "true"
+        - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+          value: Admin
         ports:
         - name: sc-grafana-http
           containerPort: 3000

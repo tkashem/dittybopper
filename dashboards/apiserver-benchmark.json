@@ -2,7 +2,6 @@
   "annotations": {
     "list": [
       {
-        "$$hashKey": "object:3403",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -13,12 +12,11 @@
       }
     ]
   },
-  "description": "API Server Permformance Dashboard",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
   "id": "",
-  "iteration": 1585536428201,
+  "iteration": 1585886063044,
   "links": [],
   "panels": [
     {
@@ -31,7 +29,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 15,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 0
       },
@@ -63,7 +61,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",subresource!=\"log\",verb!~\"LIST|WATCH|WATCHLIST|PROXY|CONNECT\"}[1m])) by(resource,verb,le))",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",subresource!=\"log\",verb!~\"WATCH|WATCHLIST|PROXY|CONNECT\"}[1m])) by(resource,verb,le))",
           "format": "time_series",
           "interval": "",
           "legendFormat": "",
@@ -83,10 +81,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Latency",
+      "title": "latency",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -129,10 +127,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 15,
         "w": 12,
-        "x": 0,
-        "y": 15
+        "x": 12,
+        "y": 0
       },
       "hiddenSeries": false,
       "id": 8,
@@ -161,7 +159,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\"}[1m])) by(instance)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(resource,code)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -171,10 +169,101 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "throughput by instance",
+      "title": "throughput",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Length of time a request spent waiting in its queue",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 23,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_wait_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le))",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "request wait duration - p&f",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -223,7 +312,7 @@
         "y": 15
       },
       "hiddenSeries": false,
-      "id": 12,
+      "id": 28,
       "legend": {
         "avg": false,
         "current": false,
@@ -249,7 +338,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\"}) by (instance)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(code)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -259,10 +348,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "requests in flight by instance",
+      "title": "request status by code",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -302,6 +391,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Number of requests released by API Priority and Fairness system for service",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -311,7 +401,7 @@
         "y": 23
       },
       "hiddenSeries": false,
-      "id": 23,
+      "id": 4,
       "legend": {
         "avg": false,
         "current": false,
@@ -337,10 +427,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_wait_duration_seconds_bucket{apiserver=\"$apiserver\"}[1m])) by(flowSchema, priorityLevel, le))",
-          "format": "time_series",
+          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema,priorityLevel)",
           "interval": "",
-          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -349,10 +437,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request_wait_duration_seconds_bucket",
+      "title": "request dispatch rate - p&f",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -392,6 +480,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Duration of request execution in the API Priority and Fairness system",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -427,7 +516,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.90, sum(rate(apiserver_flowcontrol_request_execution_seconds_bucket{apiserver=\"$apiserver\"}[1m])) by(flowSchema, priorityLevel, le) ) ",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_execution_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le) ) ",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -437,10 +526,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request_execution_seconds",
+      "title": "request execution duration - p&f",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -480,6 +569,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Number of requests currently pending in queues of the API Priority and Fairness system",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -515,7 +605,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_flowcontrol_current_inqueue_requests{apiserver=\"$apiserver\"}) by (flowSchema,priorityLevel)",
+          "expr": "sum(apiserver_flowcontrol_current_inqueue_requests{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}) by (flowSchema,priorityLevel)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -525,274 +615,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "currently in queue",
+      "title": "pending in queue - p&f",
       "tooltip": {
         "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 31
-      },
-      "hiddenSeries": false,
-      "id": 21,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(apiserver_flowcontrol_request_concurrency_limit{apiserver=\"$apiserver\"}) by (priorityLevel)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "concurrency limit by priority level",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 39
-      },
-      "hiddenSeries": false,
-      "id": 4,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\"}[1m])) by(flowSchema)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "rate by flowSchema",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 39
-      },
-      "hiddenSeries": false,
-      "id": 17,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\"}[1m])) by(priorityLevel)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "rate by priorityLevel",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -835,13 +661,14 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Length of queue in the API Priority and Fairness system, as seen by each request after it is enqueued",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 47
+        "x": 12,
+        "y": 31
       },
       "hiddenSeries": false,
       "id": 6,
@@ -870,7 +697,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.9, sum(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_bucket{apiserver=\"$apiserver\"}[1m])) by(flowSchema, priorityLevel, le))",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -880,276 +707,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request_queue_length_after_enqueue",
+      "title": "request queue length - p&f",
       "tooltip": {
         "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 47
-      },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\"}) by (requestKind)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request in flight by kind",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 55
-      },
-      "hiddenSeries": false,
-      "id": 28,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(increase(apiserver_request_total{apiserver=\"$apiserver\"}[1m])) by(code)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request status by code",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 55
-      },
-      "hiddenSeries": false,
-      "id": 18,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\"}[1m])) by (flowSchema,priorityLevel)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "rejected",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1197,7 +758,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 63
+        "y": 39
       },
       "hiddenSeries": false,
       "id": 10,
@@ -1226,7 +787,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "increase(apiserver_request_terminations_total{apiserver=\"$apiserver\"}[1m])",
+          "expr": "sum(rate(apiserver_request_terminations_total{apiserver=\"$apiserver\",instance=~\"$instance\"}[1m])) by(component)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1239,7 +800,7 @@
       "title": "request termination rate",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1279,16 +840,17 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Shared concurrency limit in the API Priority and Fairness system",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 63
+        "y": 39
       },
       "hiddenSeries": false,
-      "id": 14,
+      "id": 21,
       "legend": {
         "avg": false,
         "current": false,
@@ -1314,7 +876,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(increase(apiserver_dropped_requests_total{apiserver=\"$apiserver\"}[1m])) by (code)",
+          "expr": "sum(apiserver_flowcontrol_request_concurrency_limit{apiserver=\"$apiserver\",instance=~\"$instance\",priorityLevel=~\"$priorityLevel\"}) by (priorityLevel)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1324,10 +886,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request drop rate by code",
+      "title": "concurrency limit by priority level - p&f",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1373,7 +935,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 71
+        "y": 47
       },
       "hiddenSeries": false,
       "id": 16,
@@ -1402,7 +964,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\"}) by(instance)",
+          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\"}) by(resource)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1415,7 +977,274 @@
       "title": "long running (watches)",
       "tooltip": {
         "shared": true,
-        "sort": 0,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Number of requests rejected by API Priority and Fairness system",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 47
+      },
+      "hiddenSeries": false,
+      "id": 18,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[5m])) by (reason)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "requests rejected - p&f",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 55
+      },
+      "hiddenSeries": false,
+      "id": 14,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_dropped_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\"}[5m])) by (requestKind)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "dropped requests by code",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\",instance=~\"$instance\"}) by (instance,requestKind)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "request in flight by kind",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1459,8 +1288,8 @@
       {
         "current": {
           "selected": false,
-          "text": "prometheus-incluster",
-          "value": "prometheus-incluster"
+          "text": "Cluster Prometheus",
+          "value": "Cluster Prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -1478,31 +1307,1233 @@
         "allValue": null,
         "current": {
           "selected": true,
+          "tags": [],
           "text": "kube-apiserver",
           "value": "kube-apiserver"
         },
+        "datasource": "$datasource",
+        "definition": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
         "hide": 0,
         "includeAll": false,
+        "index": -1,
         "label": "apiserver",
         "multi": false,
         "name": "apiserver",
         "options": [
           {
-            "$$hashKey": "object:3483",
-            "selected": false,
+            "selected": true,
             "text": "kube-apiserver",
             "value": "kube-apiserver"
           },
           {
-            "$$hashKey": "object:3484",
-            "selected": true,
+            "selected": false,
             "text": "openshift-apiserver",
             "value": "openshift-apiserver"
           }
         ],
-        "query": "kube-apiserver,openshift-apiserver",
+        "query": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
+        "refresh": 0,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "custom"
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(apiserver_request_total, instance)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "instance",
+        "multi": false,
+        "name": "instance",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "10.0.0.3:6443",
+            "value": "10.0.0.3:6443"
+          },
+          {
+            "selected": false,
+            "text": "10.0.0.4:6443",
+            "value": "10.0.0.4:6443"
+          },
+          {
+            "selected": false,
+            "text": "10.0.0.5:6443",
+            "value": "10.0.0.5:6443"
+          },
+          {
+            "selected": false,
+            "text": "10.128.0.38:8443",
+            "value": "10.128.0.38:8443"
+          },
+          {
+            "selected": false,
+            "text": "10.129.0.27:8443",
+            "value": "10.129.0.27:8443"
+          },
+          {
+            "selected": false,
+            "text": "10.130.0.27:8443",
+            "value": "10.130.0.27:8443"
+          }
+        ],
+        "query": "label_values(apiserver_request_total, instance)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(apiserver_request_duration_seconds_bucket, resource)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "resource",
+        "multi": false,
+        "name": "resource",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "alertmanagers",
+            "value": "alertmanagers"
+          },
+          {
+            "selected": false,
+            "text": "apiservers",
+            "value": "apiservers"
+          },
+          {
+            "selected": false,
+            "text": "apiservices",
+            "value": "apiservices"
+          },
+          {
+            "selected": false,
+            "text": "authentications",
+            "value": "authentications"
+          },
+          {
+            "selected": false,
+            "text": "baremetalhosts",
+            "value": "baremetalhosts"
+          },
+          {
+            "selected": false,
+            "text": "brokertemplateinstances",
+            "value": "brokertemplateinstances"
+          },
+          {
+            "selected": false,
+            "text": "buildconfigs",
+            "value": "buildconfigs"
+          },
+          {
+            "selected": false,
+            "text": "builds",
+            "value": "builds"
+          },
+          {
+            "selected": false,
+            "text": "catalogsourceconfigs",
+            "value": "catalogsourceconfigs"
+          },
+          {
+            "selected": false,
+            "text": "catalogsources",
+            "value": "catalogsources"
+          },
+          {
+            "selected": false,
+            "text": "certificatesigningrequests",
+            "value": "certificatesigningrequests"
+          },
+          {
+            "selected": false,
+            "text": "clusterautoscalers",
+            "value": "clusterautoscalers"
+          },
+          {
+            "selected": false,
+            "text": "clusternetworks",
+            "value": "clusternetworks"
+          },
+          {
+            "selected": false,
+            "text": "clusteroperators",
+            "value": "clusteroperators"
+          },
+          {
+            "selected": false,
+            "text": "clusterresourcequotas",
+            "value": "clusterresourcequotas"
+          },
+          {
+            "selected": false,
+            "text": "clusterrolebindings",
+            "value": "clusterrolebindings"
+          },
+          {
+            "selected": false,
+            "text": "clusterroles",
+            "value": "clusterroles"
+          },
+          {
+            "selected": false,
+            "text": "clusterserviceversions",
+            "value": "clusterserviceversions"
+          },
+          {
+            "selected": false,
+            "text": "clusterversions",
+            "value": "clusterversions"
+          },
+          {
+            "selected": false,
+            "text": "configmaps",
+            "value": "configmaps"
+          },
+          {
+            "selected": false,
+            "text": "configs",
+            "value": "configs"
+          },
+          {
+            "selected": false,
+            "text": "consoleclidownloads",
+            "value": "consoleclidownloads"
+          },
+          {
+            "selected": false,
+            "text": "consoleexternalloglinks",
+            "value": "consoleexternalloglinks"
+          },
+          {
+            "selected": false,
+            "text": "consolelinks",
+            "value": "consolelinks"
+          },
+          {
+            "selected": false,
+            "text": "consolenotifications",
+            "value": "consolenotifications"
+          },
+          {
+            "selected": false,
+            "text": "consoles",
+            "value": "consoles"
+          },
+          {
+            "selected": false,
+            "text": "consoleyamlsamples",
+            "value": "consoleyamlsamples"
+          },
+          {
+            "selected": false,
+            "text": "containerruntimeconfigs",
+            "value": "containerruntimeconfigs"
+          },
+          {
+            "selected": false,
+            "text": "controllerconfigs",
+            "value": "controllerconfigs"
+          },
+          {
+            "selected": false,
+            "text": "controllerrevisions",
+            "value": "controllerrevisions"
+          },
+          {
+            "selected": false,
+            "text": "credentialsrequests",
+            "value": "credentialsrequests"
+          },
+          {
+            "selected": false,
+            "text": "cronjobs",
+            "value": "cronjobs"
+          },
+          {
+            "selected": false,
+            "text": "csidrivers",
+            "value": "csidrivers"
+          },
+          {
+            "selected": false,
+            "text": "csinodes",
+            "value": "csinodes"
+          },
+          {
+            "selected": false,
+            "text": "csisnapshotcontrollers",
+            "value": "csisnapshotcontrollers"
+          },
+          {
+            "selected": false,
+            "text": "customresourcedefinitions",
+            "value": "customresourcedefinitions"
+          },
+          {
+            "selected": false,
+            "text": "daemonsets",
+            "value": "daemonsets"
+          },
+          {
+            "selected": false,
+            "text": "deploymentconfigs",
+            "value": "deploymentconfigs"
+          },
+          {
+            "selected": false,
+            "text": "deployments",
+            "value": "deployments"
+          },
+          {
+            "selected": false,
+            "text": "dnses",
+            "value": "dnses"
+          },
+          {
+            "selected": false,
+            "text": "dnsrecords",
+            "value": "dnsrecords"
+          },
+          {
+            "selected": false,
+            "text": "egressnetworkpolicies",
+            "value": "egressnetworkpolicies"
+          },
+          {
+            "selected": false,
+            "text": "endpoints",
+            "value": "endpoints"
+          },
+          {
+            "selected": false,
+            "text": "endpointslices",
+            "value": "endpointslices"
+          },
+          {
+            "selected": false,
+            "text": "etcds",
+            "value": "etcds"
+          },
+          {
+            "selected": false,
+            "text": "events",
+            "value": "events"
+          },
+          {
+            "selected": false,
+            "text": "featuregates",
+            "value": "featuregates"
+          },
+          {
+            "selected": false,
+            "text": "flowschemas",
+            "value": "flowschemas"
+          },
+          {
+            "selected": false,
+            "text": "groups",
+            "value": "groups"
+          },
+          {
+            "selected": false,
+            "text": "horizontalpodautoscalers",
+            "value": "horizontalpodautoscalers"
+          },
+          {
+            "selected": false,
+            "text": "hostsubnets",
+            "value": "hostsubnets"
+          },
+          {
+            "selected": false,
+            "text": "imagecontentsourcepolicies",
+            "value": "imagecontentsourcepolicies"
+          },
+          {
+            "selected": false,
+            "text": "imagepruners",
+            "value": "imagepruners"
+          },
+          {
+            "selected": false,
+            "text": "images",
+            "value": "images"
+          },
+          {
+            "selected": false,
+            "text": "imagestreamimports",
+            "value": "imagestreamimports"
+          },
+          {
+            "selected": false,
+            "text": "imagestreams",
+            "value": "imagestreams"
+          },
+          {
+            "selected": false,
+            "text": "imagestreamtags",
+            "value": "imagestreamtags"
+          },
+          {
+            "selected": false,
+            "text": "imagetags",
+            "value": "imagetags"
+          },
+          {
+            "selected": false,
+            "text": "infrastructures",
+            "value": "infrastructures"
+          },
+          {
+            "selected": false,
+            "text": "ingressclasses",
+            "value": "ingressclasses"
+          },
+          {
+            "selected": false,
+            "text": "ingresscontrollers",
+            "value": "ingresscontrollers"
+          },
+          {
+            "selected": false,
+            "text": "ingresses",
+            "value": "ingresses"
+          },
+          {
+            "selected": false,
+            "text": "installplans",
+            "value": "installplans"
+          },
+          {
+            "selected": false,
+            "text": "ippools",
+            "value": "ippools"
+          },
+          {
+            "selected": false,
+            "text": "jobs",
+            "value": "jobs"
+          },
+          {
+            "selected": false,
+            "text": "kubeapiservers",
+            "value": "kubeapiservers"
+          },
+          {
+            "selected": false,
+            "text": "kubecontrollermanagers",
+            "value": "kubecontrollermanagers"
+          },
+          {
+            "selected": false,
+            "text": "kubeletconfigs",
+            "value": "kubeletconfigs"
+          },
+          {
+            "selected": false,
+            "text": "kubeschedulers",
+            "value": "kubeschedulers"
+          },
+          {
+            "selected": false,
+            "text": "kubestorageversionmigrators",
+            "value": "kubestorageversionmigrators"
+          },
+          {
+            "selected": false,
+            "text": "leases",
+            "value": "leases"
+          },
+          {
+            "selected": false,
+            "text": "limitranges",
+            "value": "limitranges"
+          },
+          {
+            "selected": false,
+            "text": "machineautoscalers",
+            "value": "machineautoscalers"
+          },
+          {
+            "selected": false,
+            "text": "machineconfigpools",
+            "value": "machineconfigpools"
+          },
+          {
+            "selected": false,
+            "text": "machineconfigs",
+            "value": "machineconfigs"
+          },
+          {
+            "selected": false,
+            "text": "machinehealthchecks",
+            "value": "machinehealthchecks"
+          },
+          {
+            "selected": false,
+            "text": "machines",
+            "value": "machines"
+          },
+          {
+            "selected": false,
+            "text": "machinesets",
+            "value": "machinesets"
+          },
+          {
+            "selected": false,
+            "text": "mutatingwebhookconfigurations",
+            "value": "mutatingwebhookconfigurations"
+          },
+          {
+            "selected": false,
+            "text": "namespaces",
+            "value": "namespaces"
+          },
+          {
+            "selected": false,
+            "text": "netnamespaces",
+            "value": "netnamespaces"
+          },
+          {
+            "selected": false,
+            "text": "network-attachment-definitions",
+            "value": "network-attachment-definitions"
+          },
+          {
+            "selected": false,
+            "text": "networkpolicies",
+            "value": "networkpolicies"
+          },
+          {
+            "selected": false,
+            "text": "networks",
+            "value": "networks"
+          },
+          {
+            "selected": false,
+            "text": "nodes",
+            "value": "nodes"
+          },
+          {
+            "selected": false,
+            "text": "oauthaccesstokens",
+            "value": "oauthaccesstokens"
+          },
+          {
+            "selected": false,
+            "text": "oauthauthorizetokens",
+            "value": "oauthauthorizetokens"
+          },
+          {
+            "selected": false,
+            "text": "oauthclientauthorizations",
+            "value": "oauthclientauthorizations"
+          },
+          {
+            "selected": false,
+            "text": "oauthclients",
+            "value": "oauthclients"
+          },
+          {
+            "selected": false,
+            "text": "oauths",
+            "value": "oauths"
+          },
+          {
+            "selected": false,
+            "text": "openshiftapiservers",
+            "value": "openshiftapiservers"
+          },
+          {
+            "selected": false,
+            "text": "openshiftcontrollermanagers",
+            "value": "openshiftcontrollermanagers"
+          },
+          {
+            "selected": false,
+            "text": "operatorgroups",
+            "value": "operatorgroups"
+          },
+          {
+            "selected": false,
+            "text": "operatorhubs",
+            "value": "operatorhubs"
+          },
+          {
+            "selected": false,
+            "text": "operatorpkis",
+            "value": "operatorpkis"
+          },
+          {
+            "selected": false,
+            "text": "operatorsources",
+            "value": "operatorsources"
+          },
+          {
+            "selected": false,
+            "text": "persistentvolumeclaims",
+            "value": "persistentvolumeclaims"
+          },
+          {
+            "selected": false,
+            "text": "persistentvolumes",
+            "value": "persistentvolumes"
+          },
+          {
+            "selected": false,
+            "text": "poddisruptionbudgets",
+            "value": "poddisruptionbudgets"
+          },
+          {
+            "selected": false,
+            "text": "podmonitors",
+            "value": "podmonitors"
+          },
+          {
+            "selected": false,
+            "text": "pods",
+            "value": "pods"
+          },
+          {
+            "selected": false,
+            "text": "podsecuritypolicies",
+            "value": "podsecuritypolicies"
+          },
+          {
+            "selected": false,
+            "text": "podtemplates",
+            "value": "podtemplates"
+          },
+          {
+            "selected": false,
+            "text": "priorityclasses",
+            "value": "priorityclasses"
+          },
+          {
+            "selected": false,
+            "text": "prioritylevelconfigurations",
+            "value": "prioritylevelconfigurations"
+          },
+          {
+            "selected": false,
+            "text": "profiles",
+            "value": "profiles"
+          },
+          {
+            "selected": false,
+            "text": "projectrequests",
+            "value": "projectrequests"
+          },
+          {
+            "selected": false,
+            "text": "projects",
+            "value": "projects"
+          },
+          {
+            "selected": false,
+            "text": "prometheuses",
+            "value": "prometheuses"
+          },
+          {
+            "selected": false,
+            "text": "prometheusrules",
+            "value": "prometheusrules"
+          },
+          {
+            "selected": false,
+            "text": "provisionings",
+            "value": "provisionings"
+          },
+          {
+            "selected": false,
+            "text": "proxies",
+            "value": "proxies"
+          },
+          {
+            "selected": false,
+            "text": "rangeallocations",
+            "value": "rangeallocations"
+          },
+          {
+            "selected": false,
+            "text": "replicasets",
+            "value": "replicasets"
+          },
+          {
+            "selected": false,
+            "text": "replicationcontrollers",
+            "value": "replicationcontrollers"
+          },
+          {
+            "selected": false,
+            "text": "resourcequotas",
+            "value": "resourcequotas"
+          },
+          {
+            "selected": false,
+            "text": "rolebindingrestrictions",
+            "value": "rolebindingrestrictions"
+          },
+          {
+            "selected": false,
+            "text": "rolebindings",
+            "value": "rolebindings"
+          },
+          {
+            "selected": false,
+            "text": "roles",
+            "value": "roles"
+          },
+          {
+            "selected": false,
+            "text": "routes",
+            "value": "routes"
+          },
+          {
+            "selected": false,
+            "text": "runtimeclasses",
+            "value": "runtimeclasses"
+          },
+          {
+            "selected": false,
+            "text": "schedulers",
+            "value": "schedulers"
+          },
+          {
+            "selected": false,
+            "text": "secrets",
+            "value": "secrets"
+          },
+          {
+            "selected": false,
+            "text": "securitycontextconstraints",
+            "value": "securitycontextconstraints"
+          },
+          {
+            "selected": false,
+            "text": "selfsubjectaccessreviews",
+            "value": "selfsubjectaccessreviews"
+          },
+          {
+            "selected": false,
+            "text": "serviceaccounts",
+            "value": "serviceaccounts"
+          },
+          {
+            "selected": false,
+            "text": "servicecas",
+            "value": "servicecas"
+          },
+          {
+            "selected": false,
+            "text": "servicecatalogapiservers",
+            "value": "servicecatalogapiservers"
+          },
+          {
+            "selected": false,
+            "text": "servicecatalogcontrollermanagers",
+            "value": "servicecatalogcontrollermanagers"
+          },
+          {
+            "selected": false,
+            "text": "servicemonitors",
+            "value": "servicemonitors"
+          },
+          {
+            "selected": false,
+            "text": "services",
+            "value": "services"
+          },
+          {
+            "selected": false,
+            "text": "statefulsets",
+            "value": "statefulsets"
+          },
+          {
+            "selected": false,
+            "text": "storageclasses",
+            "value": "storageclasses"
+          },
+          {
+            "selected": false,
+            "text": "storagestates",
+            "value": "storagestates"
+          },
+          {
+            "selected": false,
+            "text": "storageversionmigrations",
+            "value": "storageversionmigrations"
+          },
+          {
+            "selected": false,
+            "text": "subjectaccessreviews",
+            "value": "subjectaccessreviews"
+          },
+          {
+            "selected": false,
+            "text": "subscriptions",
+            "value": "subscriptions"
+          },
+          {
+            "selected": false,
+            "text": "templateinstances",
+            "value": "templateinstances"
+          },
+          {
+            "selected": false,
+            "text": "templates",
+            "value": "templates"
+          },
+          {
+            "selected": false,
+            "text": "thanosrulers",
+            "value": "thanosrulers"
+          },
+          {
+            "selected": false,
+            "text": "tokenreviews",
+            "value": "tokenreviews"
+          },
+          {
+            "selected": false,
+            "text": "tuneds",
+            "value": "tuneds"
+          },
+          {
+            "selected": false,
+            "text": "users",
+            "value": "users"
+          },
+          {
+            "selected": false,
+            "text": "validatingwebhookconfigurations",
+            "value": "validatingwebhookconfigurations"
+          },
+          {
+            "selected": false,
+            "text": "volumeattachments",
+            "value": "volumeattachments"
+          },
+          {
+            "selected": false,
+            "text": "volumesnapshotclasses",
+            "value": "volumesnapshotclasses"
+          },
+          {
+            "selected": false,
+            "text": "volumesnapshotcontents",
+            "value": "volumesnapshotcontents"
+          },
+          {
+            "selected": false,
+            "text": "volumesnapshots",
+            "value": "volumesnapshots"
+          }
+        ],
+        "query": "label_values(apiserver_request_duration_seconds_bucket, resource)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(code)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "code",
+        "multi": false,
+        "name": "code",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "0",
+            "value": "0"
+          },
+          {
+            "selected": false,
+            "text": "200",
+            "value": "200"
+          },
+          {
+            "selected": false,
+            "text": "201",
+            "value": "201"
+          },
+          {
+            "selected": false,
+            "text": "2xx",
+            "value": "2xx"
+          },
+          {
+            "selected": false,
+            "text": "302",
+            "value": "302"
+          },
+          {
+            "selected": false,
+            "text": "400",
+            "value": "400"
+          },
+          {
+            "selected": false,
+            "text": "401",
+            "value": "401"
+          },
+          {
+            "selected": false,
+            "text": "403",
+            "value": "403"
+          },
+          {
+            "selected": false,
+            "text": "404",
+            "value": "404"
+          },
+          {
+            "selected": false,
+            "text": "409",
+            "value": "409"
+          },
+          {
+            "selected": false,
+            "text": "410",
+            "value": "410"
+          },
+          {
+            "selected": false,
+            "text": "422",
+            "value": "422"
+          },
+          {
+            "selected": false,
+            "text": "500",
+            "value": "500"
+          },
+          {
+            "selected": false,
+            "text": "503",
+            "value": "503"
+          },
+          {
+            "selected": false,
+            "text": "504",
+            "value": "504"
+          },
+          {
+            "selected": false,
+            "text": "5xx",
+            "value": "5xx"
+          },
+          {
+            "selected": false,
+            "text": "<error>",
+            "value": "<error>"
+          },
+          {
+            "selected": false,
+            "text": "unknown",
+            "value": "unknown"
+          }
+        ],
+        "query": "label_values(code)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(verb)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "verb",
+        "multi": false,
+        "name": "verb",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "CONNECT",
+            "value": "CONNECT"
+          },
+          {
+            "selected": false,
+            "text": "CREATE",
+            "value": "CREATE"
+          },
+          {
+            "selected": false,
+            "text": "DELETE",
+            "value": "DELETE"
+          },
+          {
+            "selected": false,
+            "text": "DELETECOLLECTION",
+            "value": "DELETECOLLECTION"
+          },
+          {
+            "selected": false,
+            "text": "GET",
+            "value": "GET"
+          },
+          {
+            "selected": false,
+            "text": "LIST",
+            "value": "LIST"
+          },
+          {
+            "selected": false,
+            "text": "PATCH",
+            "value": "PATCH"
+          },
+          {
+            "selected": false,
+            "text": "POST",
+            "value": "POST"
+          },
+          {
+            "selected": false,
+            "text": "PUT",
+            "value": "PUT"
+          },
+          {
+            "selected": false,
+            "text": "UPDATE",
+            "value": "UPDATE"
+          },
+          {
+            "selected": false,
+            "text": "WATCH",
+            "value": "WATCH"
+          }
+        ],
+        "query": "label_values(verb)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(flowSchema)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "flow-schema",
+        "multi": false,
+        "name": "flowSchema",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "catch-all",
+            "value": "catch-all"
+          },
+          {
+            "selected": false,
+            "text": "exempt",
+            "value": "exempt"
+          },
+          {
+            "selected": false,
+            "text": "kube-controller-manager",
+            "value": "kube-controller-manager"
+          },
+          {
+            "selected": false,
+            "text": "kube-scheduler",
+            "value": "kube-scheduler"
+          },
+          {
+            "selected": false,
+            "text": "kube-system-service-accounts",
+            "value": "kube-system-service-accounts"
+          },
+          {
+            "selected": false,
+            "text": "service-accounts",
+            "value": "service-accounts"
+          },
+          {
+            "selected": false,
+            "text": "system-leader-election",
+            "value": "system-leader-election"
+          },
+          {
+            "selected": false,
+            "text": "system-nodes",
+            "value": "system-nodes"
+          },
+          {
+            "selected": false,
+            "text": "workload-leader-election",
+            "value": "workload-leader-election"
+          }
+        ],
+        "query": "label_values(flowSchema)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(priorityLevel)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "priority-level",
+        "multi": false,
+        "name": "priorityLevel",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "catch-all",
+            "value": "catch-all"
+          },
+          {
+            "selected": false,
+            "text": "exempt",
+            "value": "exempt"
+          },
+          {
+            "selected": false,
+            "text": "global-default",
+            "value": "global-default"
+          },
+          {
+            "selected": false,
+            "text": "leader-election",
+            "value": "leader-election"
+          },
+          {
+            "selected": false,
+            "text": "system",
+            "value": "system"
+          },
+          {
+            "selected": false,
+            "text": "workload-high",
+            "value": "workload-high"
+          },
+          {
+            "selected": false,
+            "text": "workload-low",
+            "value": "workload-low"
+          }
+        ],
+        "query": "label_values(priorityLevel)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
@@ -1525,10 +2556,10 @@
     ]
   },
   "timezone": "",
-  "title": "benchmark-test-overview",
+  "title": "apiserver performance overview",
   "uid": "X9gzM6XZk",
   "variables": {
     "list": []
   },
-  "version": 66
+  "version": 16
 }
