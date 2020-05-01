@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": "",
-  "iteration": 1585886063044,
+  "iteration": 1587066349762,
   "links": [],
   "panels": [
     {
@@ -28,10 +28,450 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 15,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 8,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(instance)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "throughput",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 28,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(instance, code)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "request status by code",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 32,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(graceful_test_kubeapiserver_termination) by(instance)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "rollout",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "hiddenSeries": false,
+      "id": 14,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_dropped_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\"}[5m])) by (requestKind)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "dropped requests by code",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "hiddenSeries": false,
+      "id": 34,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(increase(graceful_test_request_counter{code=\"<error>\",instance=~\"$clientInstance\"}[1m])) by(instance)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "error seen by client",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 16
       },
       "hiddenSeries": false,
       "id": 26,
@@ -123,106 +563,17 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 15,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "hiddenSeries": false,
-      "id": 8,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(resource,code)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "throughput",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Length of time a request spent waiting in its queue",
+      "datasource": null,
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 24
       },
       "hiddenSeries": false,
-      "id": 23,
+      "id": 30,
       "legend": {
         "avg": false,
         "current": false,
@@ -248,10 +599,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_wait_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le))",
-          "format": "time_series",
+          "expr": "sum(rate(graceful_test_request_counter[1m])) by(instance,code)",
           "interval": "",
-          "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         }
@@ -260,10 +609,10 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request wait duration - p&f",
+      "title": "client throughput ",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -303,105 +652,16 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 15
-      },
-      "hiddenSeries": false,
-      "id": 28,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(code)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request status by code",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Number of requests released by API Priority and Fairness system for service",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 32
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 2,
       "legend": {
         "avg": false,
         "current": false,
@@ -427,7 +687,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema,priorityLevel)",
+          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\",instance=~\"$instance\"}) by (instance)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -437,277 +697,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request dispatch rate - p&f",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Duration of request execution in the API Priority and Fairness system",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 23
-      },
-      "hiddenSeries": false,
-      "id": 24,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_execution_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le) ) ",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request execution duration - p&f",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Number of requests currently pending in queues of the API Priority and Fairness system",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 31
-      },
-      "hiddenSeries": false,
-      "id": 20,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(apiserver_flowcontrol_current_inqueue_requests{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}) by (flowSchema,priorityLevel)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "pending in queue - p&f",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
-        "graceful_test_request_counter{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red",
-        "{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Length of queue in the API Priority and Fairness system, as seen by each request after it is enqueued",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 31
-      },
-      "hiddenSeries": false,
-      "id": 6,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[1m])) by(flowSchema, priorityLevel, le))",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request queue length - p&f",
+      "title": "request in flight by kind",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -757,8 +747,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 39
+        "x": 12,
+        "y": 32
       },
       "hiddenSeries": false,
       "id": 10,
@@ -840,102 +830,13 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Shared concurrency limit in the API Priority and Fairness system",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 39
-      },
-      "hiddenSeries": false,
-      "id": 21,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(apiserver_flowcontrol_request_concurrency_limit{apiserver=\"$apiserver\",instance=~\"$instance\",priorityLevel=~\"$priorityLevel\"}) by (priorityLevel)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "concurrency limit by priority level - p&f",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 47
+        "y": 40
       },
       "hiddenSeries": false,
       "id": 16,
@@ -1010,361 +911,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "aliasColors": {
-        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Number of requests rejected by API Priority and Fairness system",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 47
-      },
-      "hiddenSeries": false,
-      "id": 18,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[5m])) by (reason)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "requests rejected - p&f",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 55
-      },
-      "hiddenSeries": false,
-      "id": 14,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_dropped_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\"}[5m])) by (requestKind)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "dropped requests by code",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 55
-      },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\",instance=~\"$instance\"}) by (instance,requestKind)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "request in flight by kind",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "datasource": null,
-      "type": "graph",
-      "title": "throughput by instance",
-      "gridPos": {
-        "x": 0,
-        "y": 15,
-        "w": 12,
-        "h": 8
-      },
-      "id": 30,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[1m])) by(instance)",
-          "legendFormat": "",
-          "interval": "",
-          "refId": "A"
-        }
-      ],
-      "options": {
-        "dataLinks": []
-      },
-      "renderer": "flot",
-      "yaxes": [
-        {
-          "label": null,
-          "show": true,
-          "logBase": 1,
-          "min": null,
-          "max": null,
-          "format": "short"
-        },
-        {
-          "label": null,
-          "show": true,
-          "logBase": 1,
-          "min": null,
-          "max": null,
-          "format": "short"
-        }
-      ],
-      "xaxis": {
-        "show": true,
-        "mode": "time",
-        "name": null,
-        "values": [],
-        "buckets": null
-      },
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      },
-      "lines": true,
-      "fill": 1,
-      "fillGradient": 0,
-      "linewidth": 1,
-      "dashes": false,
-      "hiddenSeries": false,
-      "dashLength": 10,
-      "spaceLength": 10,
-      "points": false,
-      "pointradius": 2,
-      "bars": false,
-      "stack": false,
-      "percentage": false,
-      "legend": {
-        "show": true,
-        "values": false,
-        "min": false,
-        "max": false,
-        "current": false,
-        "total": false,
-        "avg": false
-      },
-      "nullPointMode": "null",
-      "steppedLine": false,
-      "tooltip": {
-        "value_type": "individual",
-        "shared": true,
-        "sort": 0
-      },
-      "timeFrom": null,
-      "timeShift": null,
-      "aliasColors": {},
-      "seriesOverrides": [],
-      "thresholds": [],
-      "timeRegions": []
     }
   ],
   "refresh": "10s",
@@ -1376,6 +922,7 @@
       {
         "current": {
           "selected": false,
+          "tags": [],
           "text": "Cluster Prometheus",
           "value": "Cluster Prometheus"
         },
@@ -1394,8 +941,6 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
           "text": "kube-apiserver",
           "value": "kube-apiserver"
         },
@@ -1433,7 +978,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1463,23 +1008,23 @@
           },
           {
             "selected": false,
-            "text": "10.0.0.5:6443",
-            "value": "10.0.0.5:6443"
+            "text": "10.0.0.6:6443",
+            "value": "10.0.0.6:6443"
           },
           {
             "selected": false,
-            "text": "10.128.0.38:8443",
-            "value": "10.128.0.38:8443"
+            "text": "10.129.0.19:8443",
+            "value": "10.129.0.19:8443"
           },
           {
             "selected": false,
-            "text": "10.129.0.27:8443",
-            "value": "10.129.0.27:8443"
+            "text": "10.129.0.23:8443",
+            "value": "10.129.0.23:8443"
           },
           {
             "selected": false,
-            "text": "10.130.0.27:8443",
-            "value": "10.130.0.27:8443"
+            "text": "10.130.0.30:8443",
+            "value": "10.130.0.30:8443"
           }
         ],
         "query": "label_values(apiserver_request_total, instance)",
@@ -1496,7 +1041,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1748,11 +1293,6 @@
             "selected": false,
             "text": "featuregates",
             "value": "featuregates"
-          },
-          {
-            "selected": false,
-            "text": "flowschemas",
-            "value": "flowschemas"
           },
           {
             "selected": false,
@@ -2036,11 +1576,6 @@
           },
           {
             "selected": false,
-            "text": "prioritylevelconfigurations",
-            "value": "prioritylevelconfigurations"
-          },
-          {
-            "selected": false,
             "text": "profiles",
             "value": "profiles"
           },
@@ -2148,16 +1683,6 @@
             "selected": false,
             "text": "servicecas",
             "value": "servicecas"
-          },
-          {
-            "selected": false,
-            "text": "servicecatalogapiservers",
-            "value": "servicecatalogapiservers"
-          },
-          {
-            "selected": false,
-            "text": "servicecatalogcontrollermanagers",
-            "value": "servicecatalogcontrollermanagers"
           },
           {
             "selected": false,
@@ -2269,7 +1794,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2309,16 +1834,6 @@
           },
           {
             "selected": false,
-            "text": "302",
-            "value": "302"
-          },
-          {
-            "selected": false,
-            "text": "400",
-            "value": "400"
-          },
-          {
-            "selected": false,
             "text": "401",
             "value": "401"
           },
@@ -2336,11 +1851,6 @@
             "selected": false,
             "text": "409",
             "value": "409"
-          },
-          {
-            "selected": false,
-            "text": "410",
-            "value": "410"
           },
           {
             "selected": false,
@@ -2392,7 +1902,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2464,6 +1974,21 @@
             "selected": false,
             "text": "WATCH",
             "value": "WATCH"
+          },
+          {
+            "selected": false,
+            "text": "all",
+            "value": "all"
+          },
+          {
+            "selected": false,
+            "text": "read",
+            "value": "read"
+          },
+          {
+            "selected": false,
+            "text": "write",
+            "value": "write"
           }
         ],
         "query": "label_values(verb)",
@@ -2480,7 +2005,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2497,54 +2022,42 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "catch-all",
-            "value": "catch-all"
-          },
-          {
-            "selected": false,
-            "text": "exempt",
-            "value": "exempt"
-          },
-          {
-            "selected": false,
-            "text": "kube-controller-manager",
-            "value": "kube-controller-manager"
-          },
-          {
-            "selected": false,
-            "text": "kube-scheduler",
-            "value": "kube-scheduler"
-          },
-          {
-            "selected": false,
-            "text": "kube-system-service-accounts",
-            "value": "kube-system-service-accounts"
-          },
-          {
-            "selected": false,
-            "text": "service-accounts",
-            "value": "service-accounts"
-          },
-          {
-            "selected": false,
-            "text": "system-leader-election",
-            "value": "system-leader-election"
-          },
-          {
-            "selected": false,
-            "text": "system-nodes",
-            "value": "system-nodes"
-          },
-          {
-            "selected": false,
-            "text": "workload-leader-election",
-            "value": "workload-leader-election"
           }
         ],
         "query": "label_values(flowSchema)",
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(priorityLevel)",
+        "hide": 0,
+        "includeAll": true,
+        "index": -1,
+        "label": "priority-level",
+        "multi": false,
+        "name": "priorityLevel",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          }
+        ],
+        "query": "label_values(priorityLevel)",
         "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
@@ -2563,13 +2076,13 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(priorityLevel)",
+        "definition": "label_values(graceful_test_request_counter, instance)",
         "hide": 0,
         "includeAll": true,
         "index": -1,
-        "label": "priority-level",
+        "label": "client instance",
         "multi": false,
-        "name": "priorityLevel",
+        "name": "clientInstance",
         "options": [
           {
             "selected": true,
@@ -2578,41 +2091,21 @@
           },
           {
             "selected": false,
-            "text": "catch-all",
-            "value": "catch-all"
+            "text": "10.0.0.3:9090",
+            "value": "10.0.0.3:9090"
           },
           {
             "selected": false,
-            "text": "exempt",
-            "value": "exempt"
+            "text": "10.0.0.4:9090",
+            "value": "10.0.0.4:9090"
           },
           {
             "selected": false,
-            "text": "global-default",
-            "value": "global-default"
-          },
-          {
-            "selected": false,
-            "text": "leader-election",
-            "value": "leader-election"
-          },
-          {
-            "selected": false,
-            "text": "system",
-            "value": "system"
-          },
-          {
-            "selected": false,
-            "text": "workload-high",
-            "value": "workload-high"
-          },
-          {
-            "selected": false,
-            "text": "workload-low",
-            "value": "workload-low"
+            "text": "10.0.0.6:9090",
+            "value": "10.0.0.6:9090"
           }
         ],
-        "query": "label_values(priorityLevel)",
+        "query": "label_values(graceful_test_request_counter, instance)",
         "refresh": 0,
         "regex": "",
         "skipUrlSync": false,
@@ -2644,10 +2137,10 @@
     ]
   },
   "timezone": "",
-  "title": "API Performance Overview",
-  "uid": "X9gzM6XZk",
+  "title": "graceful termination",
+  "uid": "uXtWkqCWk",
   "variables": {
     "list": []
   },
-  "version": 16
+  "version": 3
 }
