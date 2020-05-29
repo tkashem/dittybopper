@@ -15,8 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1588109331888,
+  "iteration": 1588358005816,
   "links": [],
   "panels": [
     {
@@ -124,6 +123,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -170,7 +170,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "rpc by instance",
+      "title": "request rate - by instance",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -223,7 +223,8 @@
         "y": 8
       },
       "hiddenSeries": false,
-      "id": 28,
+      "id": 32,
+      "interval": "",
       "legend": {
         "avg": false,
         "current": false,
@@ -249,35 +250,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\",code=~\"$code\",code=~\"2..\"}[$period]))",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",subresource!=\"log\",verb!~\"WATCH|WATCHLIST|PROXY\"}[$period])) by(resource,le))",
+          "format": "time_series",
           "interval": "",
-          "legendFormat": "2xx",
+          "legendFormat": "{{resource}}",
           "refId": "A"
-        },
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\",code=~\"$code\",code=~\"3..\"}[$period]))",
-          "interval": "",
-          "legendFormat": "3xx",
-          "refId": "D"
-        },
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\",code=~\"$code\",code=~\"4..\"}[$period]))",
-          "interval": "",
-          "legendFormat": "4xx",
-          "refId": "B"
-        },
-        {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\",code=~\"$code\",code=~\"5..\"}[$period]))",
-          "interval": "",
-          "legendFormat": "5xx",
-          "refId": "C"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "ok",
+          "fill": false,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "yaxis": "left"
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request status rate",
+      "title": "request duration - 99th quantile - by resource",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -320,6 +313,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -355,7 +349,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\"}[$period])) by(resource)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\",verb=~\"$verb\"}[$period])) by(resource)",
           "interval": "",
           "legendFormat": "{{resource}}",
           "refId": "A"
@@ -365,7 +359,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "rpc by resource",
+      "title": "request rate - by resource",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -408,6 +402,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -417,7 +412,8 @@
         "y": 16
       },
       "hiddenSeries": false,
-      "id": 2,
+      "id": 34,
+      "interval": "",
       "legend": {
         "avg": false,
         "current": false,
@@ -439,21 +435,37 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\",instance=~\"$instance\"}) by (instance,requestKind)",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"LIST|GET\"}[$period])) by(le))",
+          "format": "time_series",
           "interval": "",
-          "legendFormat": "{{requestKind}}-{{instance}}",
+          "legendFormat": "read",
           "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"POST|PUT|PATCH|UPDATE|DELETE\"}[$period])) by(le))",
+          "interval": "",
+          "legendFormat": "write",
+          "refId": "B"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "ok",
+          "fill": false,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "yaxis": "left"
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request in flight",
+      "title": "request duration - read vs write",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -532,9 +544,15 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\"}) by(instance)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"LIST|GET\"}[$period]))",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "read",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"POST|PUT|PATCH|UPDATE|DELETE\"}[$period]))",
+          "interval": "",
+          "legendFormat": "write",
           "refId": "A"
         }
       ],
@@ -542,7 +560,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "long running requests",
+      "title": "request rate - read vs write",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -765,7 +783,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Response size distribution in bytes for each group, version, verb, resource, subresource, scope and component.",
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -773,6 +791,363 @@
         "w": 12,
         "x": 0,
         "y": 32
+      },
+      "hiddenSeries": false,
+      "id": 28,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\",code=~\"$code\"}[$period])) by(code)",
+          "interval": "",
+          "legendFormat": "{{code}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "request status rate",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "hiddenSeries": false,
+      "id": 33,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\"}) by(instance)",
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "long running requests",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": true,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(apiserver_current_inflight_requests{apiserver=\"$apiserver\",instance=~\"$instance\"}) by (instance,requestKind)",
+          "interval": "",
+          "legendFormat": "{{requestKind}}-{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "request in flight",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {
+        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Number of requests rejected by API Priority and Fairness system",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "hiddenSeries": false,
+      "id": 18,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by (reason)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "p&f - requests rejected ",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Response size distribution in bytes for each group, version, verb, resource, subresource, scope and component.",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 48
       },
       "hiddenSeries": false,
       "id": 31,
@@ -861,188 +1236,6 @@
     },
     {
       "aliasColors": {
-        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Number of requests rejected by API Priority and Fairness system",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 32
-      },
-      "hiddenSeries": false,
-      "id": 18,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by (reason)",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "p&f - requests rejected ",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
-      "description": "Length of time a request spent waiting in its queue",
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 40
-      },
-      "hiddenSeries": false,
-      "id": 23,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
-      "options": {
-        "dataLinks": []
-      },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_wait_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "p&f - request wait duration - 99th quantile",
-      "tooltip": {
-        "shared": true,
-        "sort": 2,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {
         "graceful_test_request_counter{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red",
         "{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red"
       },
@@ -1057,7 +1250,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 48
       },
       "hiddenSeries": false,
       "id": 6,
@@ -1139,17 +1332,17 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Number of requests released by API Priority and Fairness system for service",
+      "description": "Length of time a request spent waiting in its queue",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 23,
       "legend": {
         "avg": false,
         "current": false,
@@ -1175,8 +1368,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema,priorityLevel)",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_wait_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le))",
+          "format": "time_series",
           "interval": "",
+          "intervalFactor": 1,
           "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
           "refId": "A"
         }
@@ -1185,7 +1380,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - request dispatch rate ",
+      "title": "p&f - request wait duration - 99th quantile",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1235,7 +1430,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 56
       },
       "hiddenSeries": false,
       "id": 24,
@@ -1317,17 +1512,17 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Number of requests currently pending in queues of the API Priority and Fairness system",
+      "description": "Number of requests released by API Priority and Fairness system for service",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "hiddenSeries": false,
-      "id": 20,
+      "id": 4,
       "legend": {
         "avg": false,
         "current": false,
@@ -1353,7 +1548,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_flowcontrol_current_inqueue_requests{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}) by (flowSchema,priorityLevel)",
+          "expr": "sum(rate(apiserver_flowcontrol_dispatched_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema,priorityLevel)",
           "interval": "",
           "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
           "refId": "A"
@@ -1363,7 +1558,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - pending in queue ",
+      "title": "p&f - request dispatch rate ",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1413,7 +1608,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 56
+        "y": 64
       },
       "hiddenSeries": false,
       "id": 21,
@@ -1488,6 +1683,95 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Number of requests currently pending in queues of the API Priority and Fairness system",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 72
+      },
+      "hiddenSeries": false,
+      "id": 20,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(apiserver_flowcontrol_current_inqueue_requests{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}) by (flowSchema,priorityLevel)",
+          "interval": "",
+          "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "p&f - pending in queue ",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "10s",
@@ -1498,7 +1782,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "Cluster Prometheus",
           "value": "Cluster Prometheus"
         },
@@ -1517,9 +1801,10 @@
       {
         "allValue": null,
         "current": {
-          "tags": [],
-          "text": "kube-apiserver",
-          "value": "kube-apiserver"
+          "isNone": true,
+          "selected": true,
+          "text": "None",
+          "value": ""
         },
         "datasource": "$datasource",
         "definition": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
@@ -1531,14 +1816,10 @@
         "name": "apiserver",
         "options": [
           {
+            "isNone": true,
             "selected": true,
-            "text": "kube-apiserver",
-            "value": "kube-apiserver"
-          },
-          {
-            "selected": false,
-            "text": "openshift-apiserver",
-            "value": "openshift-apiserver"
+            "text": "None",
+            "value": ""
           }
         ],
         "query": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
@@ -1555,7 +1836,8 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
+          "tags": [],
           "text": "All",
           "value": "$__all"
         },
@@ -1575,43 +1857,33 @@
           },
           {
             "selected": false,
-            "text": "10.0.134.31:6443",
-            "value": "10.0.134.31:6443"
+            "text": "10.0.0.3:6443",
+            "value": "10.0.0.3:6443"
           },
           {
             "selected": false,
-            "text": "10.0.151.170:6443",
-            "value": "10.0.151.170:6443"
+            "text": "10.0.0.4:6443",
+            "value": "10.0.0.4:6443"
           },
           {
             "selected": false,
-            "text": "10.0.165.158:6443",
-            "value": "10.0.165.158:6443"
+            "text": "10.0.0.6:6443",
+            "value": "10.0.0.6:6443"
           },
           {
             "selected": false,
-            "text": "10.128.0.34:8443",
-            "value": "10.128.0.34:8443"
+            "text": "10.128.0.39:8443",
+            "value": "10.128.0.39:8443"
           },
           {
             "selected": false,
-            "text": "10.129.0.18:8443",
-            "value": "10.129.0.18:8443"
+            "text": "10.129.0.36:8443",
+            "value": "10.129.0.36:8443"
           },
           {
             "selected": false,
-            "text": "10.129.0.24:8443",
-            "value": "10.129.0.24:8443"
-          },
-          {
-            "selected": false,
-            "text": "10.129.0.33:8443",
-            "value": "10.129.0.33:8443"
-          },
-          {
-            "selected": false,
-            "text": "10.130.0.34:8443",
-            "value": "10.130.0.34:8443"
+            "text": "10.130.0.26:8443",
+            "value": "10.130.0.26:8443"
           }
         ],
         "query": "label_values(apiserver_request_total, instance)",
@@ -1628,7 +1900,8 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
+          "tags": [],
           "text": "All",
           "value": "$__all"
         },
@@ -1685,6 +1958,11 @@
             "selected": false,
             "text": "builds",
             "value": "builds"
+          },
+          {
+            "selected": false,
+            "text": "catalogsourceconfigs",
+            "value": "catalogsourceconfigs"
           },
           {
             "selected": false,
@@ -1813,11 +2091,6 @@
           },
           {
             "selected": false,
-            "text": "csisnapshotcontrollers",
-            "value": "csisnapshotcontrollers"
-          },
-          {
-            "selected": false,
             "text": "customresourcedefinitions",
             "value": "customresourcedefinitions"
           },
@@ -1858,16 +2131,6 @@
           },
           {
             "selected": false,
-            "text": "endpointslices",
-            "value": "endpointslices"
-          },
-          {
-            "selected": false,
-            "text": "etcds",
-            "value": "etcds"
-          },
-          {
-            "selected": false,
             "text": "events",
             "value": "events"
           },
@@ -1875,11 +2138,6 @@
             "selected": false,
             "text": "featuregates",
             "value": "featuregates"
-          },
-          {
-            "selected": false,
-            "text": "flowschemas",
-            "value": "flowschemas"
           },
           {
             "selected": false,
@@ -1903,11 +2161,6 @@
           },
           {
             "selected": false,
-            "text": "imagepruners",
-            "value": "imagepruners"
-          },
-          {
-            "selected": false,
             "text": "images",
             "value": "images"
           },
@@ -1923,23 +2176,8 @@
           },
           {
             "selected": false,
-            "text": "imagestreamtags",
-            "value": "imagestreamtags"
-          },
-          {
-            "selected": false,
-            "text": "imagetags",
-            "value": "imagetags"
-          },
-          {
-            "selected": false,
             "text": "infrastructures",
             "value": "infrastructures"
-          },
-          {
-            "selected": false,
-            "text": "ingressclasses",
-            "value": "ingressclasses"
           },
           {
             "selected": false,
@@ -1988,11 +2226,6 @@
           },
           {
             "selected": false,
-            "text": "kubestorageversionmigrators",
-            "value": "kubestorageversionmigrators"
-          },
-          {
-            "selected": false,
             "text": "leases",
             "value": "leases"
           },
@@ -2030,6 +2263,11 @@
             "selected": false,
             "text": "machinesets",
             "value": "machinesets"
+          },
+          {
+            "selected": false,
+            "text": "mcoconfigs",
+            "value": "mcoconfigs"
           },
           {
             "selected": false,
@@ -2163,16 +2401,6 @@
           },
           {
             "selected": false,
-            "text": "prioritylevelconfigurations",
-            "value": "prioritylevelconfigurations"
-          },
-          {
-            "selected": false,
-            "text": "profiles",
-            "value": "profiles"
-          },
-          {
-            "selected": false,
             "text": "projectrequests",
             "value": "projectrequests"
           },
@@ -2190,11 +2418,6 @@
             "selected": false,
             "text": "prometheusrules",
             "value": "prometheusrules"
-          },
-          {
-            "selected": false,
-            "text": "provisionings",
-            "value": "provisionings"
           },
           {
             "selected": false,
@@ -2278,6 +2501,16 @@
           },
           {
             "selected": false,
+            "text": "servicecatalogapiservers",
+            "value": "servicecatalogapiservers"
+          },
+          {
+            "selected": false,
+            "text": "servicecatalogcontrollermanagers",
+            "value": "servicecatalogcontrollermanagers"
+          },
+          {
+            "selected": false,
             "text": "servicemonitors",
             "value": "servicemonitors"
           },
@@ -2298,16 +2531,6 @@
           },
           {
             "selected": false,
-            "text": "storagestates",
-            "value": "storagestates"
-          },
-          {
-            "selected": false,
-            "text": "storageversionmigrations",
-            "value": "storageversionmigrations"
-          },
-          {
-            "selected": false,
             "text": "subjectaccessreviews",
             "value": "subjectaccessreviews"
           },
@@ -2325,11 +2548,6 @@
             "selected": false,
             "text": "templates",
             "value": "templates"
-          },
-          {
-            "selected": false,
-            "text": "thanosrulers",
-            "value": "thanosrulers"
           },
           {
             "selected": false,
@@ -2355,21 +2573,6 @@
             "selected": false,
             "text": "volumeattachments",
             "value": "volumeattachments"
-          },
-          {
-            "selected": false,
-            "text": "volumesnapshotclasses",
-            "value": "volumesnapshotclasses"
-          },
-          {
-            "selected": false,
-            "text": "volumesnapshotcontents",
-            "value": "volumesnapshotcontents"
-          },
-          {
-            "selected": false,
-            "text": "volumesnapshots",
-            "value": "volumesnapshots"
           }
         ],
         "query": "label_values(apiserver_request_duration_seconds_bucket, resource)",
@@ -2386,7 +2589,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -2423,6 +2626,11 @@
             "selected": false,
             "text": "2xx",
             "value": "2xx"
+          },
+          {
+            "selected": false,
+            "text": "400",
+            "value": "400"
           },
           {
             "selected": false,
@@ -2489,7 +2697,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -2521,11 +2729,6 @@
             "selected": false,
             "text": "DELETE",
             "value": "DELETE"
-          },
-          {
-            "selected": false,
-            "text": "DELETECOLLECTION",
-            "value": "DELETECOLLECTION"
           },
           {
             "selected": false,
@@ -2561,21 +2764,6 @@
             "selected": false,
             "text": "WATCH",
             "value": "WATCH"
-          },
-          {
-            "selected": false,
-            "text": "all",
-            "value": "all"
-          },
-          {
-            "selected": false,
-            "text": "read",
-            "value": "read"
-          },
-          {
-            "selected": false,
-            "text": "write",
-            "value": "write"
           }
         ],
         "query": "label_values(verb)",
@@ -2592,7 +2780,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -2609,51 +2797,6 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "catch-all",
-            "value": "catch-all"
-          },
-          {
-            "selected": false,
-            "text": "exempt",
-            "value": "exempt"
-          },
-          {
-            "selected": false,
-            "text": "kube-controller-manager",
-            "value": "kube-controller-manager"
-          },
-          {
-            "selected": false,
-            "text": "kube-scheduler",
-            "value": "kube-scheduler"
-          },
-          {
-            "selected": false,
-            "text": "kube-system-service-accounts",
-            "value": "kube-system-service-accounts"
-          },
-          {
-            "selected": false,
-            "text": "service-accounts",
-            "value": "service-accounts"
-          },
-          {
-            "selected": false,
-            "text": "system-leader-election",
-            "value": "system-leader-election"
-          },
-          {
-            "selected": false,
-            "text": "system-nodes",
-            "value": "system-nodes"
-          },
-          {
-            "selected": false,
-            "text": "workload-leader-election",
-            "value": "workload-leader-election"
           }
         ],
         "query": "label_values(flowSchema)",
@@ -2670,7 +2813,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "All",
           "value": "$__all"
         },
@@ -2687,41 +2830,6 @@
             "selected": true,
             "text": "All",
             "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "catch-all",
-            "value": "catch-all"
-          },
-          {
-            "selected": false,
-            "text": "exempt",
-            "value": "exempt"
-          },
-          {
-            "selected": false,
-            "text": "global-default",
-            "value": "global-default"
-          },
-          {
-            "selected": false,
-            "text": "leader-election",
-            "value": "leader-election"
-          },
-          {
-            "selected": false,
-            "text": "system",
-            "value": "system"
-          },
-          {
-            "selected": false,
-            "text": "workload-high",
-            "value": "workload-high"
-          },
-          {
-            "selected": false,
-            "text": "workload-low",
-            "value": "workload-low"
           }
         ],
         "query": "label_values(priorityLevel)",
@@ -2795,5 +2903,5 @@
   "variables": {
     "list": []
   },
-  "version": 20
+  "version": 12
 }
