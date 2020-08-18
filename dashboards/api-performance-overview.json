@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "iteration": 1588358005816,
+  "iteration": 1597773087370,
   "links": [],
   "panels": [
     {
@@ -24,6 +24,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -80,7 +81,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request duration - 99th quantile",
+      "title": "api request duration - 99th quantile",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -122,7 +123,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fill": 1,
       "fillGradient": 0,
@@ -133,7 +134,7 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 30,
+      "id": 35,
       "interval": "",
       "legend": {
         "avg": false,
@@ -156,21 +157,31 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": true,
+      "stack": false,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\",verb=~\"$verb\"}[$period])) by(instance)",
+          "expr": "histogram_quantile(0.99, sum(rate(etcd_request_duration_seconds_bucket{}[$period])) by(operation,le))",
+          "format": "time_series",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{operation}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
+      "thresholds": [
+        {
+          "colorMode": "ok",
+          "fill": false,
+          "line": true,
+          "op": "lt",
+          "value": 1,
+          "yaxis": "left"
+        }
+      ],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request rate - by instance",
+      "title": "etcd request duration - 99th quantile",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -250,10 +261,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",subresource!=\"log\",verb!~\"WATCH|WATCHLIST|PROXY\"}[$period])) by(resource,le))",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_request_duration_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",subresource!=\"log\",verb!~\"WATCH|WATCHLIST|PROXY\"}[$period])) by(resource,verb,le))",
           "format": "time_series",
           "interval": "",
-          "legendFormat": "{{resource}}",
+          "legendFormat": "{{resource}}-{{verb}}",
           "refId": "A"
         }
       ],
@@ -270,7 +281,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request duration - 99th quantile - by resource",
+      "title": "request duration by resource and verb - 99th quantile ",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -349,9 +360,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\",verb=~\"$verb\"}[$period])) by(resource)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\",verb=~\"$verb\"}[$period])) by(resource,verb)",
           "interval": "",
-          "legendFormat": "{{resource}}",
+          "legendFormat": "{{resource}}-{{verb}}",
           "refId": "A"
         }
       ],
@@ -359,7 +370,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request rate - by resource",
+      "title": "request rate - by resource and verb",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -829,7 +840,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "request status rate",
+      "title": "request rate - by status",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -871,7 +882,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
+      "datasource": null,
       "description": "",
       "fill": 1,
       "fillGradient": 0,
@@ -882,7 +893,8 @@
         "y": 32
       },
       "hiddenSeries": false,
-      "id": 33,
+      "id": 30,
+      "interval": "",
       "legend": {
         "avg": false,
         "current": false,
@@ -904,11 +916,11 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\"}) by(instance)",
+          "expr": "sum(rate(apiserver_request_total{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",code=~\"$code\",verb=~\"$verb\"}[$period])) by(instance)",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -918,7 +930,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "long running requests",
+      "title": "request rate - by instance",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1044,14 +1056,12 @@
       }
     },
     {
-      "aliasColors": {
-        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Number of requests rejected by API Priority and Fairness system",
+      "description": "",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1061,7 +1071,7 @@
         "y": 40
       },
       "hiddenSeries": false,
-      "id": 18,
+      "id": 33,
       "legend": {
         "avg": false,
         "current": false,
@@ -1087,9 +1097,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by (reason)",
+          "expr": "sum(apiserver_longrunning_gauge{apiserver=\"$apiserver\",instance=~\"$instance\",resource=~\"$resource\",verb=~\"$verb\"}) by(instance)",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1097,7 +1107,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - requests rejected ",
+      "title": "long running requests",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1236,14 +1246,13 @@
     },
     {
       "aliasColors": {
-        "graceful_test_request_counter{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red",
-        "{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red"
+        "{flowSchema=\"catch-all\",priorityLevel=\"catch-all\"}": "red"
       },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Length of queue in the API Priority and Fairness system, as seen by each request after it is enqueued",
+      "description": "Number of requests rejected by API Priority and Fairness system",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1253,7 +1262,7 @@
         "y": 48
       },
       "hiddenSeries": false,
-      "id": 6,
+      "id": 18,
       "legend": {
         "avg": false,
         "current": false,
@@ -1279,9 +1288,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le))",
+          "expr": "sum(rate(apiserver_flowcontrol_rejected_requests_total{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by (reason)",
           "interval": "",
-          "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -1289,7 +1298,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - request queue length ",
+      "title": "p&f - requests rejected ",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1418,12 +1427,15 @@
       }
     },
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "graceful_test_request_counter{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red",
+        "{code=\"<error>\",instance=\"localhost:9000\",job=\"performance\",method=\"GET\"}": "red"
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Duration of request execution in the API Priority and Fairness system",
+      "description": "Length of queue in the API Priority and Fairness system, as seen by each request after it is enqueued",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1433,7 +1445,7 @@
         "y": 56
       },
       "hiddenSeries": false,
-      "id": 24,
+      "id": 6,
       "legend": {
         "avg": false,
         "current": false,
@@ -1459,7 +1471,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_execution_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le) ) ",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_queue_length_after_enqueue_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le))",
           "interval": "",
           "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
           "refId": "A"
@@ -1469,7 +1481,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - request execution duration ",
+      "title": "p&f - request queue length ",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1601,7 +1613,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Shared concurrency limit in the API Priority and Fairness system",
+      "description": "Duration of request execution in the API Priority and Fairness system",
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -1611,7 +1623,7 @@
         "y": 64
       },
       "hiddenSeries": false,
-      "id": 21,
+      "id": 24,
       "legend": {
         "avg": false,
         "current": false,
@@ -1637,9 +1649,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(apiserver_flowcontrol_request_concurrency_limit{apiserver=\"$apiserver\",instance=~\"$instance\",priorityLevel=~\"$priorityLevel\"}) by (priorityLevel)",
+          "expr": "histogram_quantile(0.99, sum(rate(apiserver_flowcontrol_request_execution_seconds_bucket{apiserver=\"$apiserver\",instance=~\"$instance\",flowSchema=~\"$flowSchema\",priorityLevel=~\"$priorityLevel\"}[$period])) by(flowSchema, priorityLevel, le) ) ",
           "interval": "",
-          "legendFormat": "{{priorityLevel}}",
+          "legendFormat": "{{flowSchema}}:{{priorityLevel}}",
           "refId": "A"
         }
       ],
@@ -1647,7 +1659,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "p&f - concurrency limit by priority level ",
+      "title": "p&f - request execution duration ",
       "tooltip": {
         "shared": true,
         "sort": 2,
@@ -1772,6 +1784,95 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "description": "Shared concurrency limit in the API Priority and Fairness system",
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 72
+      },
+      "hiddenSeries": false,
+      "id": 21,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(apiserver_flowcontrol_request_concurrency_limit{apiserver=\"$apiserver\",instance=~\"$instance\",priorityLevel=~\"$priorityLevel\"}) by (priorityLevel)",
+          "interval": "",
+          "legendFormat": "{{priorityLevel}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "p&f - concurrency limit by priority level ",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "10s",
@@ -1782,7 +1883,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "Cluster Prometheus",
           "value": "Cluster Prometheus"
         },
@@ -1801,10 +1902,8 @@
       {
         "allValue": null,
         "current": {
-          "isNone": true,
-          "selected": true,
-          "text": "None",
-          "value": ""
+          "text": "kube-apiserver",
+          "value": "kube-apiserver"
         },
         "datasource": "$datasource",
         "definition": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
@@ -1814,16 +1913,9 @@
         "label": "apiserver",
         "multi": false,
         "name": "apiserver",
-        "options": [
-          {
-            "isNone": true,
-            "selected": true,
-            "text": "None",
-            "value": ""
-          }
-        ],
-        "query": "label_values(apiserver_request_duration_seconds_bucket, apiserver)",
-        "refresh": 0,
+        "options": [],
+        "query": "",
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -1836,8 +1928,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1849,45 +1940,9 @@
         "label": "instance",
         "multi": false,
         "name": "instance",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "10.0.0.3:6443",
-            "value": "10.0.0.3:6443"
-          },
-          {
-            "selected": false,
-            "text": "10.0.0.4:6443",
-            "value": "10.0.0.4:6443"
-          },
-          {
-            "selected": false,
-            "text": "10.0.0.6:6443",
-            "value": "10.0.0.6:6443"
-          },
-          {
-            "selected": false,
-            "text": "10.128.0.39:8443",
-            "value": "10.128.0.39:8443"
-          },
-          {
-            "selected": false,
-            "text": "10.129.0.36:8443",
-            "value": "10.129.0.36:8443"
-          },
-          {
-            "selected": false,
-            "text": "10.130.0.26:8443",
-            "value": "10.130.0.26:8443"
-          }
-        ],
+        "options": [],
         "query": "label_values(apiserver_request_total, instance)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -1900,8 +1955,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "tags": [],
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1913,670 +1967,9 @@
         "label": "resource",
         "multi": false,
         "name": "resource",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "alertmanagers",
-            "value": "alertmanagers"
-          },
-          {
-            "selected": false,
-            "text": "apiservers",
-            "value": "apiservers"
-          },
-          {
-            "selected": false,
-            "text": "apiservices",
-            "value": "apiservices"
-          },
-          {
-            "selected": false,
-            "text": "authentications",
-            "value": "authentications"
-          },
-          {
-            "selected": false,
-            "text": "baremetalhosts",
-            "value": "baremetalhosts"
-          },
-          {
-            "selected": false,
-            "text": "brokertemplateinstances",
-            "value": "brokertemplateinstances"
-          },
-          {
-            "selected": false,
-            "text": "buildconfigs",
-            "value": "buildconfigs"
-          },
-          {
-            "selected": false,
-            "text": "builds",
-            "value": "builds"
-          },
-          {
-            "selected": false,
-            "text": "catalogsourceconfigs",
-            "value": "catalogsourceconfigs"
-          },
-          {
-            "selected": false,
-            "text": "catalogsources",
-            "value": "catalogsources"
-          },
-          {
-            "selected": false,
-            "text": "certificatesigningrequests",
-            "value": "certificatesigningrequests"
-          },
-          {
-            "selected": false,
-            "text": "clusterautoscalers",
-            "value": "clusterautoscalers"
-          },
-          {
-            "selected": false,
-            "text": "clusternetworks",
-            "value": "clusternetworks"
-          },
-          {
-            "selected": false,
-            "text": "clusteroperators",
-            "value": "clusteroperators"
-          },
-          {
-            "selected": false,
-            "text": "clusterresourcequotas",
-            "value": "clusterresourcequotas"
-          },
-          {
-            "selected": false,
-            "text": "clusterrolebindings",
-            "value": "clusterrolebindings"
-          },
-          {
-            "selected": false,
-            "text": "clusterroles",
-            "value": "clusterroles"
-          },
-          {
-            "selected": false,
-            "text": "clusterserviceversions",
-            "value": "clusterserviceversions"
-          },
-          {
-            "selected": false,
-            "text": "clusterversions",
-            "value": "clusterversions"
-          },
-          {
-            "selected": false,
-            "text": "configmaps",
-            "value": "configmaps"
-          },
-          {
-            "selected": false,
-            "text": "configs",
-            "value": "configs"
-          },
-          {
-            "selected": false,
-            "text": "consoleclidownloads",
-            "value": "consoleclidownloads"
-          },
-          {
-            "selected": false,
-            "text": "consoleexternalloglinks",
-            "value": "consoleexternalloglinks"
-          },
-          {
-            "selected": false,
-            "text": "consolelinks",
-            "value": "consolelinks"
-          },
-          {
-            "selected": false,
-            "text": "consolenotifications",
-            "value": "consolenotifications"
-          },
-          {
-            "selected": false,
-            "text": "consoles",
-            "value": "consoles"
-          },
-          {
-            "selected": false,
-            "text": "consoleyamlsamples",
-            "value": "consoleyamlsamples"
-          },
-          {
-            "selected": false,
-            "text": "containerruntimeconfigs",
-            "value": "containerruntimeconfigs"
-          },
-          {
-            "selected": false,
-            "text": "controllerconfigs",
-            "value": "controllerconfigs"
-          },
-          {
-            "selected": false,
-            "text": "controllerrevisions",
-            "value": "controllerrevisions"
-          },
-          {
-            "selected": false,
-            "text": "credentialsrequests",
-            "value": "credentialsrequests"
-          },
-          {
-            "selected": false,
-            "text": "cronjobs",
-            "value": "cronjobs"
-          },
-          {
-            "selected": false,
-            "text": "csidrivers",
-            "value": "csidrivers"
-          },
-          {
-            "selected": false,
-            "text": "csinodes",
-            "value": "csinodes"
-          },
-          {
-            "selected": false,
-            "text": "customresourcedefinitions",
-            "value": "customresourcedefinitions"
-          },
-          {
-            "selected": false,
-            "text": "daemonsets",
-            "value": "daemonsets"
-          },
-          {
-            "selected": false,
-            "text": "deploymentconfigs",
-            "value": "deploymentconfigs"
-          },
-          {
-            "selected": false,
-            "text": "deployments",
-            "value": "deployments"
-          },
-          {
-            "selected": false,
-            "text": "dnses",
-            "value": "dnses"
-          },
-          {
-            "selected": false,
-            "text": "dnsrecords",
-            "value": "dnsrecords"
-          },
-          {
-            "selected": false,
-            "text": "egressnetworkpolicies",
-            "value": "egressnetworkpolicies"
-          },
-          {
-            "selected": false,
-            "text": "endpoints",
-            "value": "endpoints"
-          },
-          {
-            "selected": false,
-            "text": "events",
-            "value": "events"
-          },
-          {
-            "selected": false,
-            "text": "featuregates",
-            "value": "featuregates"
-          },
-          {
-            "selected": false,
-            "text": "groups",
-            "value": "groups"
-          },
-          {
-            "selected": false,
-            "text": "horizontalpodautoscalers",
-            "value": "horizontalpodautoscalers"
-          },
-          {
-            "selected": false,
-            "text": "hostsubnets",
-            "value": "hostsubnets"
-          },
-          {
-            "selected": false,
-            "text": "imagecontentsourcepolicies",
-            "value": "imagecontentsourcepolicies"
-          },
-          {
-            "selected": false,
-            "text": "images",
-            "value": "images"
-          },
-          {
-            "selected": false,
-            "text": "imagestreamimports",
-            "value": "imagestreamimports"
-          },
-          {
-            "selected": false,
-            "text": "imagestreams",
-            "value": "imagestreams"
-          },
-          {
-            "selected": false,
-            "text": "infrastructures",
-            "value": "infrastructures"
-          },
-          {
-            "selected": false,
-            "text": "ingresscontrollers",
-            "value": "ingresscontrollers"
-          },
-          {
-            "selected": false,
-            "text": "ingresses",
-            "value": "ingresses"
-          },
-          {
-            "selected": false,
-            "text": "installplans",
-            "value": "installplans"
-          },
-          {
-            "selected": false,
-            "text": "ippools",
-            "value": "ippools"
-          },
-          {
-            "selected": false,
-            "text": "jobs",
-            "value": "jobs"
-          },
-          {
-            "selected": false,
-            "text": "kubeapiservers",
-            "value": "kubeapiservers"
-          },
-          {
-            "selected": false,
-            "text": "kubecontrollermanagers",
-            "value": "kubecontrollermanagers"
-          },
-          {
-            "selected": false,
-            "text": "kubeletconfigs",
-            "value": "kubeletconfigs"
-          },
-          {
-            "selected": false,
-            "text": "kubeschedulers",
-            "value": "kubeschedulers"
-          },
-          {
-            "selected": false,
-            "text": "leases",
-            "value": "leases"
-          },
-          {
-            "selected": false,
-            "text": "limitranges",
-            "value": "limitranges"
-          },
-          {
-            "selected": false,
-            "text": "machineautoscalers",
-            "value": "machineautoscalers"
-          },
-          {
-            "selected": false,
-            "text": "machineconfigpools",
-            "value": "machineconfigpools"
-          },
-          {
-            "selected": false,
-            "text": "machineconfigs",
-            "value": "machineconfigs"
-          },
-          {
-            "selected": false,
-            "text": "machinehealthchecks",
-            "value": "machinehealthchecks"
-          },
-          {
-            "selected": false,
-            "text": "machines",
-            "value": "machines"
-          },
-          {
-            "selected": false,
-            "text": "machinesets",
-            "value": "machinesets"
-          },
-          {
-            "selected": false,
-            "text": "mcoconfigs",
-            "value": "mcoconfigs"
-          },
-          {
-            "selected": false,
-            "text": "mutatingwebhookconfigurations",
-            "value": "mutatingwebhookconfigurations"
-          },
-          {
-            "selected": false,
-            "text": "namespaces",
-            "value": "namespaces"
-          },
-          {
-            "selected": false,
-            "text": "netnamespaces",
-            "value": "netnamespaces"
-          },
-          {
-            "selected": false,
-            "text": "network-attachment-definitions",
-            "value": "network-attachment-definitions"
-          },
-          {
-            "selected": false,
-            "text": "networkpolicies",
-            "value": "networkpolicies"
-          },
-          {
-            "selected": false,
-            "text": "networks",
-            "value": "networks"
-          },
-          {
-            "selected": false,
-            "text": "nodes",
-            "value": "nodes"
-          },
-          {
-            "selected": false,
-            "text": "oauthaccesstokens",
-            "value": "oauthaccesstokens"
-          },
-          {
-            "selected": false,
-            "text": "oauthauthorizetokens",
-            "value": "oauthauthorizetokens"
-          },
-          {
-            "selected": false,
-            "text": "oauthclientauthorizations",
-            "value": "oauthclientauthorizations"
-          },
-          {
-            "selected": false,
-            "text": "oauthclients",
-            "value": "oauthclients"
-          },
-          {
-            "selected": false,
-            "text": "oauths",
-            "value": "oauths"
-          },
-          {
-            "selected": false,
-            "text": "openshiftapiservers",
-            "value": "openshiftapiservers"
-          },
-          {
-            "selected": false,
-            "text": "openshiftcontrollermanagers",
-            "value": "openshiftcontrollermanagers"
-          },
-          {
-            "selected": false,
-            "text": "operatorgroups",
-            "value": "operatorgroups"
-          },
-          {
-            "selected": false,
-            "text": "operatorhubs",
-            "value": "operatorhubs"
-          },
-          {
-            "selected": false,
-            "text": "operatorpkis",
-            "value": "operatorpkis"
-          },
-          {
-            "selected": false,
-            "text": "operatorsources",
-            "value": "operatorsources"
-          },
-          {
-            "selected": false,
-            "text": "persistentvolumeclaims",
-            "value": "persistentvolumeclaims"
-          },
-          {
-            "selected": false,
-            "text": "persistentvolumes",
-            "value": "persistentvolumes"
-          },
-          {
-            "selected": false,
-            "text": "poddisruptionbudgets",
-            "value": "poddisruptionbudgets"
-          },
-          {
-            "selected": false,
-            "text": "podmonitors",
-            "value": "podmonitors"
-          },
-          {
-            "selected": false,
-            "text": "pods",
-            "value": "pods"
-          },
-          {
-            "selected": false,
-            "text": "podsecuritypolicies",
-            "value": "podsecuritypolicies"
-          },
-          {
-            "selected": false,
-            "text": "podtemplates",
-            "value": "podtemplates"
-          },
-          {
-            "selected": false,
-            "text": "priorityclasses",
-            "value": "priorityclasses"
-          },
-          {
-            "selected": false,
-            "text": "projectrequests",
-            "value": "projectrequests"
-          },
-          {
-            "selected": false,
-            "text": "projects",
-            "value": "projects"
-          },
-          {
-            "selected": false,
-            "text": "prometheuses",
-            "value": "prometheuses"
-          },
-          {
-            "selected": false,
-            "text": "prometheusrules",
-            "value": "prometheusrules"
-          },
-          {
-            "selected": false,
-            "text": "proxies",
-            "value": "proxies"
-          },
-          {
-            "selected": false,
-            "text": "rangeallocations",
-            "value": "rangeallocations"
-          },
-          {
-            "selected": false,
-            "text": "replicasets",
-            "value": "replicasets"
-          },
-          {
-            "selected": false,
-            "text": "replicationcontrollers",
-            "value": "replicationcontrollers"
-          },
-          {
-            "selected": false,
-            "text": "resourcequotas",
-            "value": "resourcequotas"
-          },
-          {
-            "selected": false,
-            "text": "rolebindingrestrictions",
-            "value": "rolebindingrestrictions"
-          },
-          {
-            "selected": false,
-            "text": "rolebindings",
-            "value": "rolebindings"
-          },
-          {
-            "selected": false,
-            "text": "roles",
-            "value": "roles"
-          },
-          {
-            "selected": false,
-            "text": "routes",
-            "value": "routes"
-          },
-          {
-            "selected": false,
-            "text": "runtimeclasses",
-            "value": "runtimeclasses"
-          },
-          {
-            "selected": false,
-            "text": "schedulers",
-            "value": "schedulers"
-          },
-          {
-            "selected": false,
-            "text": "secrets",
-            "value": "secrets"
-          },
-          {
-            "selected": false,
-            "text": "securitycontextconstraints",
-            "value": "securitycontextconstraints"
-          },
-          {
-            "selected": false,
-            "text": "selfsubjectaccessreviews",
-            "value": "selfsubjectaccessreviews"
-          },
-          {
-            "selected": false,
-            "text": "serviceaccounts",
-            "value": "serviceaccounts"
-          },
-          {
-            "selected": false,
-            "text": "servicecas",
-            "value": "servicecas"
-          },
-          {
-            "selected": false,
-            "text": "servicecatalogapiservers",
-            "value": "servicecatalogapiservers"
-          },
-          {
-            "selected": false,
-            "text": "servicecatalogcontrollermanagers",
-            "value": "servicecatalogcontrollermanagers"
-          },
-          {
-            "selected": false,
-            "text": "servicemonitors",
-            "value": "servicemonitors"
-          },
-          {
-            "selected": false,
-            "text": "services",
-            "value": "services"
-          },
-          {
-            "selected": false,
-            "text": "statefulsets",
-            "value": "statefulsets"
-          },
-          {
-            "selected": false,
-            "text": "storageclasses",
-            "value": "storageclasses"
-          },
-          {
-            "selected": false,
-            "text": "subjectaccessreviews",
-            "value": "subjectaccessreviews"
-          },
-          {
-            "selected": false,
-            "text": "subscriptions",
-            "value": "subscriptions"
-          },
-          {
-            "selected": false,
-            "text": "templateinstances",
-            "value": "templateinstances"
-          },
-          {
-            "selected": false,
-            "text": "templates",
-            "value": "templates"
-          },
-          {
-            "selected": false,
-            "text": "tokenreviews",
-            "value": "tokenreviews"
-          },
-          {
-            "selected": false,
-            "text": "tuneds",
-            "value": "tuneds"
-          },
-          {
-            "selected": false,
-            "text": "users",
-            "value": "users"
-          },
-          {
-            "selected": false,
-            "text": "validatingwebhookconfigurations",
-            "value": "validatingwebhookconfigurations"
-          },
-          {
-            "selected": false,
-            "text": "volumeattachments",
-            "value": "volumeattachments"
-          }
-        ],
+        "options": [],
         "query": "label_values(apiserver_request_duration_seconds_bucket, resource)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2589,7 +1982,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2601,90 +1994,9 @@
         "label": "code",
         "multi": false,
         "name": "code",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "0",
-            "value": "0"
-          },
-          {
-            "selected": false,
-            "text": "200",
-            "value": "200"
-          },
-          {
-            "selected": false,
-            "text": "201",
-            "value": "201"
-          },
-          {
-            "selected": false,
-            "text": "2xx",
-            "value": "2xx"
-          },
-          {
-            "selected": false,
-            "text": "400",
-            "value": "400"
-          },
-          {
-            "selected": false,
-            "text": "403",
-            "value": "403"
-          },
-          {
-            "selected": false,
-            "text": "404",
-            "value": "404"
-          },
-          {
-            "selected": false,
-            "text": "409",
-            "value": "409"
-          },
-          {
-            "selected": false,
-            "text": "422",
-            "value": "422"
-          },
-          {
-            "selected": false,
-            "text": "500",
-            "value": "500"
-          },
-          {
-            "selected": false,
-            "text": "503",
-            "value": "503"
-          },
-          {
-            "selected": false,
-            "text": "504",
-            "value": "504"
-          },
-          {
-            "selected": false,
-            "text": "5xx",
-            "value": "5xx"
-          },
-          {
-            "selected": false,
-            "text": "<error>",
-            "value": "<error>"
-          },
-          {
-            "selected": false,
-            "text": "unknown",
-            "value": "unknown"
-          }
-        ],
+        "options": [],
         "query": "label_values(code)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2697,7 +2009,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2709,65 +2021,9 @@
         "label": "verb",
         "multi": false,
         "name": "verb",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "CONNECT",
-            "value": "CONNECT"
-          },
-          {
-            "selected": false,
-            "text": "CREATE",
-            "value": "CREATE"
-          },
-          {
-            "selected": false,
-            "text": "DELETE",
-            "value": "DELETE"
-          },
-          {
-            "selected": false,
-            "text": "GET",
-            "value": "GET"
-          },
-          {
-            "selected": false,
-            "text": "LIST",
-            "value": "LIST"
-          },
-          {
-            "selected": false,
-            "text": "PATCH",
-            "value": "PATCH"
-          },
-          {
-            "selected": false,
-            "text": "POST",
-            "value": "POST"
-          },
-          {
-            "selected": false,
-            "text": "PUT",
-            "value": "PUT"
-          },
-          {
-            "selected": false,
-            "text": "UPDATE",
-            "value": "UPDATE"
-          },
-          {
-            "selected": false,
-            "text": "WATCH",
-            "value": "WATCH"
-          }
-        ],
+        "options": [],
         "query": "label_values(verb)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2780,7 +2036,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2792,15 +2048,9 @@
         "label": "flow-schema",
         "multi": false,
         "name": "flowSchema",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          }
-        ],
+        "options": [],
         "query": "label_values(flowSchema)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2813,7 +2063,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -2825,15 +2075,9 @@
         "label": "priority-level",
         "multi": false,
         "name": "priorityLevel",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          }
-        ],
+        "options": [],
         "query": "label_values(priorityLevel)",
-        "refresh": 0,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2849,15 +2093,15 @@
         "auto_min": "10s",
         "current": {
           "selected": false,
-          "text": "auto",
-          "value": "$__auto_interval_period"
+          "text": "5m",
+          "value": "5m"
         },
         "hide": 0,
         "label": "interval",
         "name": "period",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "auto",
             "value": "$__auto_interval_period"
           },
@@ -2867,7 +2111,7 @@
             "value": "1m"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "5m",
             "value": "5m"
           }
@@ -2903,5 +2147,5 @@
   "variables": {
     "list": []
   },
-  "version": 12
+  "version": 1
 }
